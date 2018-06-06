@@ -9,7 +9,7 @@ public class EclAttribute implements Refinement {
 	protected SubExpressionConstraint value;
 	protected boolean reverse;
 	protected EclAttributeGroup parentGroup;
-	protected Integer cardinalityMin;
+	protected Integer cardinalityMin = 1;
 	protected Integer cardinalityMax;
 	private String numericComparisonOperator;
 	private String numericValue;
@@ -32,11 +32,11 @@ public class EclAttribute implements Refinement {
 		this.reverse = true;
 	}
 
-	public void setCardinalityMin(int cardinalityMin) {
+	public void setCardinalityMin(Integer cardinalityMin) {
 		this.cardinalityMin = cardinalityMin;
 	}
 
-	public void setCardinalityMax(int cardinalityMax) {
+	public void setCardinalityMax(Integer cardinalityMax) {
 		this.cardinalityMax = cardinalityMax;
 	}
 

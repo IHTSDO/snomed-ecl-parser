@@ -210,9 +210,13 @@ public class ECLQueryBuilder {
 			if (cardinality != null) {
 				if (cardinality.minvalue().nonnegativeintegervalue() != null) {
 					attribute.setCardinalityMin(Integer.parseInt(cardinality.minvalue().nonnegativeintegervalue().getText()));
+				} else {
+					attribute.setCardinalityMin(null);
 				}
 				if (cardinality.maxvalue().nonnegativeintegervalue() != null) {
 					attribute.setCardinalityMax(Integer.parseInt(cardinality.maxvalue().nonnegativeintegervalue().getText()));
+				} else {
+					attribute.setCardinalityMax(null);
 				}
 			}
 
