@@ -36,7 +36,7 @@ public class ECLQueryBuilderTest {
 	@Test
 	public void parseNestedAttributeValue() throws Exception {
 		ExpressionConstraint query = eclQueryBuilder.createQuery(
-				"< 404684003 |Clinical finding| :\n" +
+				"< 404684003 |Clüåäönical 豈 ﷸ finding| :\n" +
 						"    47429007 |Associated with| = " +
 						"        (< 404684003 |Clinical finding| : \n" +
 						"            116676008 |Associated morphology|  = <<  55641003 |Infarct| )");
