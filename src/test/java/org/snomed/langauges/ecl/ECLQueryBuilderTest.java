@@ -36,10 +36,10 @@ public class ECLQueryBuilderTest {
 	@Test
 	public void parseNestedAttributeValue() throws Exception {
 		ExpressionConstraint query = eclQueryBuilder.createQuery(
-				"< 404684003 |üåäöá 豈 ہیلو Сәлеметсіз бе finding| :\n" +
+				"< 404684003 |üåäöáðę 中国 ہیلو Қазақ finding| :\n" +
 						"    47429007 |שלום with| = " +
-						"        (< 404684003 |Clinical finding| : \n" +
-						"            116676008 |Associated morphology|  = <<  55641003 |Infarct| )");
+						"        (< 404684003 |안녕하세요 finding| : \n" +
+						"            116676008 |بهاس ملايو morphology|  = <<  55641003 |český| )");
 
 		Assert.assertTrue(query instanceof RefinedExpressionConstraint);
 
