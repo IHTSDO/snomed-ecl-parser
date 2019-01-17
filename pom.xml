@@ -10,7 +10,7 @@
 	<name>SNOMED CT Expression Constraint Language Parser</name>
 	<description>A parser for Expression Constraint Language, a SNOMED CT domain specific language.</description>
 	<build>
-	<plugins>		
+	<plugins>
 		<plugin>
 				<groupId>org.antlr</groupId>
 				<artifactId>antlr4-maven-plugin</artifactId>
