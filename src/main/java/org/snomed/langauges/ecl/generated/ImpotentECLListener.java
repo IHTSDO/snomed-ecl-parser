@@ -709,46 +709,6 @@ public abstract class ImpotentECLListener implements ECLListener {
 	}
 
 	@Override
-	public void enterUtf8_2(ECLParser.Utf8_2Context ctx) {
-
-	}
-
-	@Override
-	public void exitUtf8_2(ECLParser.Utf8_2Context ctx) {
-
-	}
-
-	@Override
-	public void enterUtf8_3(ECLParser.Utf8_3Context ctx) {
-
-	}
-
-	@Override
-	public void exitUtf8_3(ECLParser.Utf8_3Context ctx) {
-
-	}
-
-	@Override
-	public void enterUtf8_4(ECLParser.Utf8_4Context ctx) {
-
-	}
-
-	@Override
-	public void exitUtf8_4(ECLParser.Utf8_4Context ctx) {
-
-	}
-
-	@Override
-	public void enterUtf8_tail(ECLParser.Utf8_tailContext ctx) {
-
-	}
-
-	@Override
-	public void exitUtf8_tail(ECLParser.Utf8_tailContext ctx) {
-
-	}
-
-	@Override
 	public void visitTerminal(TerminalNode terminalNode) {
 
 	}
