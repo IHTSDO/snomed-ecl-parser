@@ -9,7 +9,26 @@
 
 	<name>SNOMED CT Expression Constraint Language Parser</name>
 	<description>A parser for Expression Constraint Language, a SNOMED CT domain specific language.</description>
-
+	<build>
+	<plugins>		
+		<plugin>
+				<groupId>org.antlr</groupId>
+				<artifactId>antlr4-maven-plugin</artifactId>
+				<version>4.5.1</version>
+				<configuration>
+					<visitor>false</visitor>
+					<listener>true</listener>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>antlr4</goal>
+						</goals>
+					</execution>
+				</executions>
+		</plugin>
+	</plugins>
+	</build>
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
