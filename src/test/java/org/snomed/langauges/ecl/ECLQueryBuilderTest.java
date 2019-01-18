@@ -8,6 +8,8 @@ import org.snomed.langauges.ecl.domain.expressionconstraint.RefinedExpressionCon
 import org.snomed.langauges.ecl.domain.expressionconstraint.SubExpressionConstraint;
 import org.snomed.langauges.ecl.domain.refinement.*;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class ECLQueryBuilderTest {
@@ -61,6 +63,40 @@ public class ECLQueryBuilderTest {
 		SubExpressionConstraint nestedAttributeValue = nestedAttribute.getValue();
 		assertEquals(Operator.descendantorselfof, nestedAttributeValue.getOperator());
 		assertEquals("55641003", nestedAttributeValue.getConceptId());
+	}
+
+	@Test
+	public void parseDisjunctionSubRefinement() {
+		ExpressionConstraint query = eclQueryBuilder.createQuery(
+				"<404684003 |Clinical finding|: " +
+						"{ 363698007 |Finding site| = * } " +
+						"OR { 116676008 |Associated morphology| = * }");
+
+		assertTrue(query instanceof RefinedExpressionConstraint);
+
+		RefinedExpressionConstraint refinedExpressionConstraint = (RefinedExpressionConstraint) query;
+		EclRefinement eclRefinement = refinedExpressionConstraint.getEclRefinement();
+		assertNotNull(eclRefinement);
+
+		SubRefinement subRefinement = eclRefinement.getSubRefinement();
+		assertNotNull(subRefinement);
+		EclAttributeGroup eclAttributeGroup = subRefinement.getEclAttributeGroup();
+		assertNotNull(eclAttributeGroup);
+		EclAttributeSet attributeSet = eclAttributeGroup.getAttributeSet();
+		assertNotNull(attributeSet);
+		SubAttributeSet subAttributeSet = attributeSet.getSubAttributeSet();
+		assertNotNull(subAttributeSet);
+
+		List<SubRefinement> disjunctionSubRefinements = eclRefinement.getDisjunctionSubRefinements();
+		assertNotNull(disjunctionSubRefinements);
+		assertEquals(1, disjunctionSubRefinements.size());
+		SubRefinement subRefinement1 = disjunctionSubRefinements.get(0);
+		EclAttributeGroup eclAttributeGroup1 = subRefinement1.getEclAttributeGroup();
+		assertNotNull(eclAttributeGroup1);
+		EclAttributeSet attributeSet1 = eclAttributeGroup1.getAttributeSet();
+		assertNotNull(attributeSet1);
+		SubAttributeSet subAttributeSet1 = attributeSet1.getSubAttributeSet();
+		assertNotNull(subAttributeSet1);
 	}
 
 }
