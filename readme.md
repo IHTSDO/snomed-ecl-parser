@@ -4,7 +4,7 @@ An Open Source Java library for parsing ECL, a SNOMED CT domain specific languag
 
 ## ANTLR4 Grammar
 The official SNOMED International ABNF syntax definition for ECL has been converted to ANTLR4 in order to generate tooling support.
-- [ECL ANTLR4 grammar file](parser-generation/ECL-ABNF-source.txt)
+- [ECL ANTLR4 grammar file](src/main/antlr4/org/snomed/langauges/ecl/generated/parser/ECL.g4)
 - [How to generate ANTLR4 grammar from ABNF](generate_antlr4_grammar.md)
 
 ## Capabilities
