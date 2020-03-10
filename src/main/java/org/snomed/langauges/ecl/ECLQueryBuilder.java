@@ -121,6 +121,9 @@ public class ECLQueryBuilder {
 					subExpressionConstraint.setWildcard(true);
 				}
 				if (eclfocusconcept.eclconceptreference() != null) {
+					if (eclfocusconcept.eclconceptreference().term() != null) {
+						subExpressionConstraint.setTerm(eclfocusconcept.eclconceptreference().term().getText());
+					}
 					subExpressionConstraint.setConceptId(eclfocusconcept.eclconceptreference().conceptid().getText());
 				}
 			} else {
