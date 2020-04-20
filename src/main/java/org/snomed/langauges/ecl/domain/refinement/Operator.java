@@ -16,4 +16,6 @@ public enum Operator {
 		}
 		return null;
 	}
+
+	public String getText() { return text; }
 }

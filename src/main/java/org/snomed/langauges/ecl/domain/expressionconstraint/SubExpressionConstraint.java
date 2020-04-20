@@ -6,6 +6,7 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 
 	protected final Operator operator;
 	protected String conceptId;
+	protected String term;
 	protected boolean wildcard;
 	protected ExpressionConstraint nestedExpressionConstraint;
 
@@ -16,6 +17,8 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 	public void setConceptId(String conceptId) {
 		this.conceptId = conceptId;
 	}
+
+	public void setTerm(String term) { this.term = term; }
 
 	public void setWildcard(boolean wildcard) {
 		this.wildcard = wildcard;
@@ -33,6 +36,8 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		return conceptId;
 	}
 
+	public String getTerm() { return term; }
+
 	public boolean isWildcard() {
 		return wildcard;
 	}
@@ -45,7 +50,8 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 	public String toString() {
 		return "SubExpressionConstraint{" +
 				"operator=" + operator +
-				", conceptId='" + conceptId + '\'' +
+				", conceptId=" + conceptId +
+				", term=" + term +
 				", wildcard=" + wildcard +
 				", nestedExpressionConstraint=" + nestedExpressionConstraint +
 				'}';
