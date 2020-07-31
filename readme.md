@@ -1,6 +1,6 @@
 # SNOMED CT Expression Constraint Language Parser
 
-An Open Source Java library for parsing ECL, a SNOMED CT domain specific language.
+An Open Source Java library for parsing ECL 1.5, a SNOMED CT domain specific language.
 
 ## ANTLR4 Grammar
 The official SNOMED International ABNF syntax definition for ECL has been converted to ANTLR4 in order to generate tooling support.

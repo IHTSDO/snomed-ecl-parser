@@ -118,4 +118,12 @@ public class ECLQueryBuilderTest {
 		assertEquals("Associated morphology", subAttributeSet1.getAttribute().getAttributeName().getTerm());
 	}
 
+	@Test
+	public void parseFilters() {
+		ExpressionConstraint query = eclQueryBuilder.createQuery(
+				"< 404684003 |Clinical finding (finding)| {{ term = \"hjärta\", language = sv, dialect = sv, type = syn }}");
+		assertNotNull(query);
+
+	}
+
 }
