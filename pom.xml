@@ -5,7 +5,7 @@
 
 	<groupId>org.snomed.languages</groupId>
 	<artifactId>snomed-ecl-parser</artifactId>
-	<version>1.2.1-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 
 	<name>SNOMED CT Expression Constraint Language Parser</name>
 	<description>A parser for Expression Constraint Language, a SNOMED CT domain specific language.</description>
@@ -64,25 +64,25 @@
 			<id>ihtsdo-releases</id>
 			<releases><enabled>true</enabled></releases>
 			<snapshots><enabled>false</enabled></snapshots>
-			<url>https://maven.ihtsdotools.org/content/repositories/releases/</url>
+			<url>https://nexus3.ihtsdotools.org/repository/maven-releases/</url>
 		</repository>
 		<repository>
 			<id>ihtsdo-snapshots</id>
 			<releases><enabled>false</enabled></releases>
 			<snapshots><enabled>true</enabled></snapshots>
-			<url>https://maven.ihtsdotools.org/content/repositories/snapshots/</url>
+			<url>https://nexus3.ihtsdotools.org/repository/maven-snapshots/</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
 		<repository>
-			<id>ihtsdo-public-nexus</id>
+			<id>ihtsdo-public-nexus-releases</id>
 			<name>IHTSDO Public Nexus Releases</name>
-			<url>https://maven.ihtsdotools.org/content/repositories/releases/</url>
+			<url>https://nexus3.ihtsdotools.org/repository/maven-releases/</url>
 		</repository>
 		<snapshotRepository>
-			<id>ihtsdo-public-nexus</id>
+			<id>ihtsdo-public-nexus-snapshots</id>
 			<name>IHTSDO Public Nexus Snapshots</name>
-			<url>https://maven.ihtsdotools.org/content/repositories/snapshots/</url>
+			<url>https://nexus3.ihtsdotools.org/repository/maven-snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 </project>
