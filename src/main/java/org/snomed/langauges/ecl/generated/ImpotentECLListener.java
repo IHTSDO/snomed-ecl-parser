@@ -727,4 +727,524 @@ public abstract class ImpotentECLListener implements ECLListener {
 	public void exitEveryRule(ParserRuleContext parserRuleContext) {
 
 	}
+
+	@Override
+	public void enterEclconceptreferenceset(ECLParser.EclconceptreferencesetContext ctx) {
+
+	}
+
+	@Override
+	public void exitEclconceptreferenceset(ECLParser.EclconceptreferencesetContext ctx) {
+
+	}
+
+	@Override
+	public void enterChildorselfof(ECLParser.ChildorselfofContext ctx) {
+
+	}
+
+	@Override
+	public void exitChildorselfof(ECLParser.ChildorselfofContext ctx) {
+
+	}
+
+	@Override
+	public void enterParentorselfof(ECLParser.ParentorselfofContext ctx) {
+
+	}
+
+	@Override
+	public void exitParentorselfof(ECLParser.ParentorselfofContext ctx) {
+
+	}
+
+	@Override
+	public void enterBooleancomparisonoperator(ECLParser.BooleancomparisonoperatorContext ctx) {
+
+	}
+
+	@Override
+	public void exitBooleancomparisonoperator(ECLParser.BooleancomparisonoperatorContext ctx) {
+
+	}
+
+	@Override
+	public void enterFilterconstraint(ECLParser.FilterconstraintContext ctx) {
+
+	}
+
+	@Override
+	public void exitFilterconstraint(ECLParser.FilterconstraintContext ctx) {
+
+	}
+
+	@Override
+	public void enterFilter(ECLParser.FilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitFilter(ECLParser.FilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterTermfilter(ECLParser.TermfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitTermfilter(ECLParser.TermfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterTermkeyword(ECLParser.TermkeywordContext ctx) {
+
+	}
+
+	@Override
+	public void exitTermkeyword(ECLParser.TermkeywordContext ctx) {
+
+	}
+
+	@Override
+	public void enterTypedsearchterm(ECLParser.TypedsearchtermContext ctx) {
+
+	}
+
+	@Override
+	public void exitTypedsearchterm(ECLParser.TypedsearchtermContext ctx) {
+
+	}
+
+	@Override
+	public void enterTypedsearchtermset(ECLParser.TypedsearchtermsetContext ctx) {
+
+	}
+
+	@Override
+	public void exitTypedsearchtermset(ECLParser.TypedsearchtermsetContext ctx) {
+
+	}
+
+	@Override
+	public void enterWild(ECLParser.WildContext ctx) {
+
+	}
+
+	@Override
+	public void exitWild(ECLParser.WildContext ctx) {
+
+	}
+
+	@Override
+	public void enterMatch(ECLParser.MatchContext ctx) {
+
+	}
+
+	@Override
+	public void exitMatch(ECLParser.MatchContext ctx) {
+
+	}
+
+	@Override
+	public void enterMatchsearchterm(ECLParser.MatchsearchtermContext ctx) {
+
+	}
+
+	@Override
+	public void exitMatchsearchterm(ECLParser.MatchsearchtermContext ctx) {
+
+	}
+
+	@Override
+	public void enterMatchsearchtermset(ECLParser.MatchsearchtermsetContext ctx) {
+
+	}
+
+	@Override
+	public void exitMatchsearchtermset(ECLParser.MatchsearchtermsetContext ctx) {
+
+	}
+
+	@Override
+	public void enterWildsearchterm(ECLParser.WildsearchtermContext ctx) {
+
+	}
+
+	@Override
+	public void exitWildsearchterm(ECLParser.WildsearchtermContext ctx) {
+
+	}
+
+	@Override
+	public void enterWildsearchtermset(ECLParser.WildsearchtermsetContext ctx) {
+
+	}
+
+	@Override
+	public void exitWildsearchtermset(ECLParser.WildsearchtermsetContext ctx) {
+
+	}
+
+	@Override
+	public void enterLanguagefilter(ECLParser.LanguagefilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitLanguagefilter(ECLParser.LanguagefilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterLanguage(ECLParser.LanguageContext ctx) {
+
+	}
+
+	@Override
+	public void exitLanguage(ECLParser.LanguageContext ctx) {
+
+	}
+
+	@Override
+	public void enterLanguagecode(ECLParser.LanguagecodeContext ctx) {
+
+	}
+
+	@Override
+	public void exitLanguagecode(ECLParser.LanguagecodeContext ctx) {
+
+	}
+
+	@Override
+	public void enterLanguagecodeset(ECLParser.LanguagecodesetContext ctx) {
+
+	}
+
+	@Override
+	public void exitLanguagecodeset(ECLParser.LanguagecodesetContext ctx) {
+
+	}
+
+	@Override
+	public void enterTypefilter(ECLParser.TypefilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitTypefilter(ECLParser.TypefilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterTypeidfilter(ECLParser.TypeidfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitTypeidfilter(ECLParser.TypeidfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterTypeid(ECLParser.TypeidContext ctx) {
+
+	}
+
+	@Override
+	public void exitTypeid(ECLParser.TypeidContext ctx) {
+
+	}
+
+	@Override
+	public void enterTypetokenfilter(ECLParser.TypetokenfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitTypetokenfilter(ECLParser.TypetokenfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterType(ECLParser.TypeContext ctx) {
+
+	}
+
+	@Override
+	public void exitType(ECLParser.TypeContext ctx) {
+
+	}
+
+	@Override
+	public void enterTypetoken(ECLParser.TypetokenContext ctx) {
+
+	}
+
+	@Override
+	public void exitTypetoken(ECLParser.TypetokenContext ctx) {
+
+	}
+
+	@Override
+	public void enterTypetokenset(ECLParser.TypetokensetContext ctx) {
+
+	}
+
+	@Override
+	public void exitTypetokenset(ECLParser.TypetokensetContext ctx) {
+
+	}
+
+	@Override
+	public void enterSynonym(ECLParser.SynonymContext ctx) {
+
+	}
+
+	@Override
+	public void exitSynonym(ECLParser.SynonymContext ctx) {
+
+	}
+
+	@Override
+	public void enterFullyspecifiedname(ECLParser.FullyspecifiednameContext ctx) {
+
+	}
+
+	@Override
+	public void exitFullyspecifiedname(ECLParser.FullyspecifiednameContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinition(ECLParser.DefinitionContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinition(ECLParser.DefinitionContext ctx) {
+
+	}
+
+	@Override
+	public void enterDialectfilter(ECLParser.DialectfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitDialectfilter(ECLParser.DialectfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterDialectidfilter(ECLParser.DialectidfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitDialectidfilter(ECLParser.DialectidfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterDialectid(ECLParser.DialectidContext ctx) {
+
+	}
+
+	@Override
+	public void exitDialectid(ECLParser.DialectidContext ctx) {
+
+	}
+
+	@Override
+	public void enterDialectaliasfilter(ECLParser.DialectaliasfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitDialectaliasfilter(ECLParser.DialectaliasfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterDialect(ECLParser.DialectContext ctx) {
+
+	}
+
+	@Override
+	public void exitDialect(ECLParser.DialectContext ctx) {
+
+	}
+
+	@Override
+	public void enterDialectalias(ECLParser.DialectaliasContext ctx) {
+
+	}
+
+	@Override
+	public void exitDialectalias(ECLParser.DialectaliasContext ctx) {
+
+	}
+
+	@Override
+	public void enterDialectaliasset(ECLParser.DialectaliassetContext ctx) {
+
+	}
+
+	@Override
+	public void exitDialectaliasset(ECLParser.DialectaliassetContext ctx) {
+
+	}
+
+	@Override
+	public void enterDialectidset(ECLParser.DialectidsetContext ctx) {
+
+	}
+
+	@Override
+	public void exitDialectidset(ECLParser.DialectidsetContext ctx) {
+
+	}
+
+	@Override
+	public void enterAcceptabilityset(ECLParser.AcceptabilitysetContext ctx) {
+
+	}
+
+	@Override
+	public void exitAcceptabilityset(ECLParser.AcceptabilitysetContext ctx) {
+
+	}
+
+	@Override
+	public void enterAcceptabilityidset(ECLParser.AcceptabilityidsetContext ctx) {
+
+	}
+
+	@Override
+	public void exitAcceptabilityidset(ECLParser.AcceptabilityidsetContext ctx) {
+
+	}
+
+	@Override
+	public void enterAcceptabilitytokenset(ECLParser.AcceptabilitytokensetContext ctx) {
+
+	}
+
+	@Override
+	public void exitAcceptabilitytokenset(ECLParser.AcceptabilitytokensetContext ctx) {
+
+	}
+
+	@Override
+	public void enterAcceptabilitytoken(ECLParser.AcceptabilitytokenContext ctx) {
+
+	}
+
+	@Override
+	public void exitAcceptabilitytoken(ECLParser.AcceptabilitytokenContext ctx) {
+
+	}
+
+	@Override
+	public void enterAcceptable(ECLParser.AcceptableContext ctx) {
+
+	}
+
+	@Override
+	public void exitAcceptable(ECLParser.AcceptableContext ctx) {
+
+	}
+
+	@Override
+	public void enterPreferred(ECLParser.PreferredContext ctx) {
+
+	}
+
+	@Override
+	public void exitPreferred(ECLParser.PreferredContext ctx) {
+
+	}
+
+	@Override
+	public void enterBooleanvalue(ECLParser.BooleanvalueContext ctx) {
+
+	}
+
+	@Override
+	public void exitBooleanvalue(ECLParser.BooleanvalueContext ctx) {
+
+	}
+
+	@Override
+	public void enterTrue_1(ECLParser.True_1Context ctx) {
+
+	}
+
+	@Override
+	public void exitTrue_1(ECLParser.True_1Context ctx) {
+
+	}
+
+	@Override
+	public void enterFalse_1(ECLParser.False_1Context ctx) {
+
+	}
+
+	@Override
+	public void exitFalse_1(ECLParser.False_1Context ctx) {
+
+	}
+
+	@Override
+	public void enterStar(ECLParser.StarContext ctx) {
+
+	}
+
+	@Override
+	public void exitStar(ECLParser.StarContext ctx) {
+
+	}
+
+	@Override
+	public void enterEscapedwildchar(ECLParser.EscapedwildcharContext ctx) {
+
+	}
+
+	@Override
+	public void exitEscapedwildchar(ECLParser.EscapedwildcharContext ctx) {
+
+	}
+
+	@Override
+	public void enterNonwsnonescapedchar(ECLParser.NonwsnonescapedcharContext ctx) {
+
+	}
+
+	@Override
+	public void exitNonwsnonescapedchar(ECLParser.NonwsnonescapedcharContext ctx) {
+
+	}
+
+	@Override
+	public void enterAlpha(ECLParser.AlphaContext ctx) {
+
+	}
+
+	@Override
+	public void exitAlpha(ECLParser.AlphaContext ctx) {
+
+	}
+
+	@Override
+	public void enterDash(ECLParser.DashContext ctx) {
+
+	}
+
+	@Override
+	public void exitDash(ECLParser.DashContext ctx) {
+
+	}
 }
