@@ -1,6 +1,9 @@
 package org.snomed.langauges.ecl.domain.expressionconstraint;
 
+import org.snomed.langauges.ecl.domain.filter.FilterConstraint;
 import org.snomed.langauges.ecl.domain.refinement.Operator;
+
+import java.util.List;
 
 public class SubExpressionConstraint implements ExpressionConstraint {
 
@@ -9,6 +12,7 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 	protected String term;
 	protected boolean wildcard;
 	protected ExpressionConstraint nestedExpressionConstraint;
+	protected List<FilterConstraint> filterConstraints;
 
 	public SubExpressionConstraint(Operator operator) {
 		this.operator = operator;
@@ -26,6 +30,10 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 
 	public void setNestedExpressionConstraint(ExpressionConstraint nestedExpressionConstraint) {
 		this.nestedExpressionConstraint = nestedExpressionConstraint;
+	}
+
+	public void setFilterConstraints(List<FilterConstraint> filterConstraints) {
+		this.filterConstraints = filterConstraints;
 	}
 
 	public Operator getOperator() {
@@ -46,6 +54,10 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		return nestedExpressionConstraint;
 	}
 
+	public List<FilterConstraint> getFilterConstraints() {
+		return filterConstraints;
+	}
+
 	@Override
 	public String toString() {
 		return "SubExpressionConstraint{" +
@@ -54,6 +66,7 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 				", term=" + term +
 				", wildcard=" + wildcard +
 				", nestedExpressionConstraint=" + nestedExpressionConstraint +
+				", filterConstraints=" + filterConstraints +
 				'}';
 	}
 }

@@ -117,5 +117,4 @@ public class ECLQueryBuilderTest {
 		assertEquals("116676008", subAttributeSet1.getAttribute().getAttributeName().getConceptId());
 		assertEquals("Associated morphology", subAttributeSet1.getAttribute().getAttributeName().getTerm());
 	}
-
 }
