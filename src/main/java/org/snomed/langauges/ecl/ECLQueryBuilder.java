@@ -4,13 +4,13 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.snomed.langauges.ecl.domain.expressionconstraint.*;
+import org.snomed.langauges.ecl.domain.filter.*;
 import org.snomed.langauges.ecl.domain.refinement.*;
 import org.snomed.langauges.ecl.generated.ImpotentECLListener;
 import org.snomed.langauges.ecl.generated.parser.ECLLexer;
 import org.snomed.langauges.ecl.generated.parser.ECLParser;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ECLQueryBuilder {
@@ -58,18 +58,18 @@ public class ECLQueryBuilder {
 			}
 		}
 
-		private ExpressionConstraint build(ECLParser.ExpressionconstraintContext expressionconstraint) {
-			if (expressionconstraint.refinedexpressionconstraint() != null) {
-				return build(expressionconstraint.refinedexpressionconstraint());
+		private ExpressionConstraint build(ECLParser.ExpressionconstraintContext expressionConstraint) {
+			if (expressionConstraint.refinedexpressionconstraint() != null) {
+				return build(expressionConstraint.refinedexpressionconstraint());
 			}
-			if (expressionconstraint.compoundexpressionconstraint() != null) {
-				return build(expressionconstraint.compoundexpressionconstraint());
+			if (expressionConstraint.compoundexpressionconstraint() != null) {
+				return build(expressionConstraint.compoundexpressionconstraint());
 			}
-			if (expressionconstraint.dottedexpressionconstraint() != null) {
-				return build(expressionconstraint.dottedexpressionconstraint());
+			if (expressionConstraint.dottedexpressionconstraint() != null) {
+				return build(expressionConstraint.dottedexpressionconstraint());
 			}
-			if (expressionconstraint.subexpressionconstraint() != null) {
-				return build(expressionconstraint.subexpressionconstraint());
+			if (expressionConstraint.subexpressionconstraint() != null) {
+				return build(expressionConstraint.subexpressionconstraint());
 			}
 			return null;
 		}
@@ -115,22 +115,173 @@ public class ECLQueryBuilder {
 
 			SubExpressionConstraint subExpressionConstraint = eclObjectFactory.getSubExpressionConstraint(operator);
 
-			ECLParser.EclfocusconceptContext eclfocusconcept = ctx.eclfocusconcept();
-			if (eclfocusconcept != null) {
-				if (eclfocusconcept.wildcard() != null) {
+			ECLParser.EclfocusconceptContext eclFocusConcept = ctx.eclfocusconcept();
+			if (eclFocusConcept != null) {
+				if (eclFocusConcept.wildcard() != null) {
 					subExpressionConstraint.setWildcard(true);
 				}
-				if (eclfocusconcept.eclconceptreference() != null) {
-					if (eclfocusconcept.eclconceptreference().term() != null) {
-						subExpressionConstraint.setTerm(eclfocusconcept.eclconceptreference().term().getText());
+				if (eclFocusConcept.eclconceptreference() != null) {
+					if (eclFocusConcept.eclconceptreference().term() != null) {
+						subExpressionConstraint.setTerm(eclFocusConcept.eclconceptreference().term().getText());
 					}
-					subExpressionConstraint.setConceptId(eclfocusconcept.eclconceptreference().conceptid().getText());
+					subExpressionConstraint.setConceptId(eclFocusConcept.eclconceptreference().conceptid().getText());
 				}
 			} else {
 				subExpressionConstraint.setNestedExpressionConstraint(build(ctx.expressionconstraint()));
 			}
-
+			// add filter constraint if available
+			if (ctx.filterconstraint() != null) {
+				subExpressionConstraint.setFilterConstraints(buildFilterConstraints(ctx.filterconstraint()));
+			}
 			return subExpressionConstraint;
+		}
+
+		private List<FilterConstraint> buildFilterConstraints(List<ECLParser.FilterconstraintContext> filterConstraintContexts) {
+			final List<FilterConstraint> filterConstraints = new ArrayList<>();
+			filterConstraintContexts.forEach(constraintContext -> {
+				FilterConstraint constraint = new FilterConstraint();
+				constraintContext.filter().forEach(filter -> {
+					if (filter.termfilter() != null) {
+						constraint.addFilter(buildFilter(filter.termfilter()));
+					}
+					if (filter.typefilter() != null) {
+						constraint.addFilter(buildFilter(filter.typefilter()));
+					}
+					if (filter.languagefilter() != null) {
+						constraint.addFilter(buildFilter(filter.languagefilter()));
+					}
+					if (filter.dialectfilter() != null) {
+						constraint.addFilter(buildFilter(filter.dialectfilter()));
+					}
+				});
+				filterConstraints.add(constraint);
+			});
+			return filterConstraints;
+		}
+
+		private Filter buildFilter(ECLParser.TermfilterContext termFilterContext) {
+			TermFilter termFilter = new TermFilter(termFilterContext.booleancomparisonoperator().getText());
+			if (termFilterContext.typedsearchtermset() != null) {
+				termFilterContext.typedsearchtermset().typedsearchterm().forEach(term -> termFilter.addTypedSearchTerm(term.getText()));
+			} else if (termFilterContext.typedsearchterm() != null) {
+				termFilter.addTypedSearchTerm(termFilterContext.typedsearchterm().getText());
+			}
+			return termFilter;
+		}
+
+		private Filter buildFilter(ECLParser.TypefilterContext typeFilterContext) {
+			if (typeFilterContext.typeidfilter() != null) {
+				DescriptionTypeFilter typeFilter = new DescriptionTypeFilter(typeFilterContext.typeidfilter().booleancomparisonoperator().getText());
+				if (typeFilterContext.typeidfilter().eclconceptreferenceset() != null) {
+					typeFilterContext.typeidfilter().eclconceptreferenceset().eclconceptreference().forEach(concept -> typeFilter.addType(DescriptionType.getTypeById(concept.conceptid().getText())));
+				} else if (typeFilterContext.typeidfilter().eclconceptreference() != null) {
+					typeFilter.addType(DescriptionType.getTypeById(typeFilterContext.typeidfilter().eclconceptreference().conceptid().getText()));
+				}
+				return typeFilter;
+			} else if (typeFilterContext.typetokenfilter() != null) {
+				DescriptionTypeFilter typeFilter = new DescriptionTypeFilter(typeFilterContext.typetokenfilter().booleancomparisonoperator().getText());
+				if (typeFilterContext.typetokenfilter().typetokenset() != null) {
+					typeFilterContext.typetokenfilter().typetokenset().typetoken().forEach(token ->
+						typeFilter.addType(DescriptionType.getTypeByToken(token.getText())));
+				} else if (typeFilterContext.typetokenfilter().typetoken() != null) {
+					typeFilter.addType(DescriptionType.getTypeByToken(typeFilterContext.typetokenfilter().typetoken().getText()));
+				}
+				return typeFilter;
+			}
+			return null;
+		}
+
+		private Filter buildFilter(ECLParser.LanguagefilterContext languageFilterContext) {
+			LanguageFilter languageFilter = new LanguageFilter(languageFilterContext.booleancomparisonoperator().getText());
+			if (languageFilterContext.languagecodeset() != null) {
+				languageFilterContext.languagecodeset().languagecode().forEach(languageCode -> languageFilter.addLanguageCode(languageCode.getText()));
+			} else if (languageFilterContext.languagecode() != null) {
+				languageFilter.addLanguageCode(languageFilterContext.languagecode().getText());
+			}
+			return languageFilter;
+		}
+
+		private Filter buildFilter(ECLParser.DialectfilterContext dialectFilterContext) {
+			DialectFilter dialectFilter = null;
+			if (dialectFilterContext.dialectaliasfilter() != null) {
+				// build dialect filter using alias
+				dialectFilter = buildFilter(dialectFilterContext.dialectaliasfilter());
+			} else if (dialectFilterContext.dialectidfilter() != null) {
+				dialectFilter = buildFilter(dialectFilterContext.dialectidfilter());
+			}
+			// update acceptability here as in some cases they are only available at this context
+			if (dialectFilterContext.acceptabilityset() != null && dialectFilter != null) {
+				List<Acceptability> acceptabilityList = constructAcceptability(dialectFilterContext.acceptabilityset());
+				for (Dialect dialect : dialectFilter.getAcceptabilityMap().keySet()) {
+					for (Acceptability acceptability : acceptabilityList) {
+						dialectFilter.addDialect(dialect, acceptability);
+					}
+				}
+			}
+			return dialectFilter;
+		}
+
+		private DialectFilter buildFilter(ECLParser.DialectidfilterContext dialectIdFilterContext) {
+			final DialectFilter dialectFilter = new DialectFilter(dialectIdFilterContext.booleancomparisonoperator().getText());
+			ECLParser.DialectidsetContext dialectIdSetContext = dialectIdFilterContext.dialectidset();
+			if (dialectIdSetContext != null) {
+				List<ECLParser.AcceptabilitysetContext> acceptabilityContexts = dialectIdSetContext.acceptabilityset();
+				List<ECLParser.EclconceptreferenceContext> dialectIdContexts = dialectIdFilterContext.dialectidset().eclconceptreference();
+				for (int i = 0; i < dialectIdContexts.size(); i++) {
+					Dialect dialect = new Dialect().withDialectId(dialectIdContexts.get(0).conceptid().getText());
+					if (!acceptabilityContexts.isEmpty()) {
+						constructAcceptability(acceptabilityContexts.get(i)).forEach(acceptability -> dialectFilter.addDialect(dialect, acceptability));
+					} else {
+						dialectFilter.addDialect(dialect, null);
+					}
+				}
+			} else if (dialectIdFilterContext.dialectid() != null) {
+				String dialectId = dialectIdFilterContext.eclconceptreference().conceptid().getText();
+				dialectFilter.addDialect(new Dialect().withDialectId(dialectId), null);
+			}
+			return dialectFilter;
+		}
+
+		private DialectFilter buildFilter(ECLParser.DialectaliasfilterContext dialectAliasFilterContext) {
+			final DialectFilter dialectFilter = new DialectFilter(dialectAliasFilterContext.booleancomparisonoperator().getText());
+			if (dialectAliasFilterContext.dialectaliasset() != null) {
+				List<ECLParser.AcceptabilitysetContext> acceptabilityContextList = dialectAliasFilterContext.dialectaliasset().acceptabilityset();
+				List<ECLParser.DialectaliasContext> dialectAliasContexts = dialectAliasFilterContext.dialectaliasset().dialectalias();
+				for (int i = 0; i < dialectAliasContexts.size(); i++) {
+					Dialect dialect = new Dialect().withAlias(dialectAliasContexts.get(i).getText());
+					if (!acceptabilityContextList.isEmpty()) {
+						constructAcceptability(acceptabilityContextList.get(i)).forEach(acceptability -> dialectFilter.addDialect(dialect, acceptability));
+					} else {
+						dialectFilter.addDialect(dialect, null);
+					}
+				}
+			} else if (dialectAliasFilterContext.dialectalias() != null) {
+				// acceptability will be updated later
+				dialectFilter.addDialect(new Dialect().withAlias(dialectAliasFilterContext.dialectalias().getText()), null);
+			}
+			return dialectFilter;
+		}
+
+		private List<Acceptability> constructAcceptability(ECLParser.AcceptabilitysetContext context) {
+			List<Acceptability> result = new ArrayList<>();
+			if (context.acceptabilityidset() != null) {
+				context.acceptabilityidset().eclconceptreferenceset().eclconceptreference().forEach(r -> {
+					Acceptability acceptability = Acceptability.getAcceptabilityById(r.conceptid().getText());
+					if (acceptability == null) {
+						throw new IllegalArgumentException(String.format("Unknown acceptability id %s", r.conceptid().getText()));
+					}
+					result.add(acceptability);
+				});
+			} else if (context.acceptabilitytokenset() != null) {
+				context.acceptabilitytokenset().acceptabilitytoken().forEach(r -> {
+					Acceptability acceptability = Acceptability.getAcceptabilityByToken(r.getText());
+					if (acceptability == null) {
+						throw new IllegalArgumentException(String.format("Unknown acceptability %s", r.acceptable().getText()));
+					}
+					result.add(acceptability);
+				});
+			}
+			return result;
 		}
 
 		private EclRefinement build(ECLParser.EclrefinementContext ctx) {
@@ -148,8 +299,8 @@ public class ECLQueryBuilder {
 			return refinement;
 		}
 
-		private List<SubRefinement> buildSubRefinements(List<ECLParser.SubrefinementContext> subrefinements) {
-			return subrefinements.stream().map(this::build).collect(Collectors.toList());
+		private List<SubRefinement> buildSubRefinements(List<ECLParser.SubrefinementContext> subRefinements) {
+			return subRefinements.stream().map(this::build).collect(Collectors.toList());
 		}
 
 		private SubRefinement build(ECLParser.SubrefinementContext ctx) {
@@ -174,8 +325,8 @@ public class ECLQueryBuilder {
 			return eclAttributeSet;
 		}
 
-		private List<SubAttributeSet> buildSubAttributeSet(List<ECLParser.SubattributesetContext> subattributeset, EclAttributeGroup withinGroup) {
-			return subattributeset.stream().map(ctx -> build(ctx, withinGroup)).collect(Collectors.toList());
+		private List<SubAttributeSet> buildSubAttributeSet(List<ECLParser.SubattributesetContext> subAttributeSet, EclAttributeGroup withinGroup) {
+			return subAttributeSet.stream().map(ctx -> build(ctx, withinGroup)).collect(Collectors.toList());
 		}
 
 		private SubAttributeSet build(ECLParser.SubattributesetContext ctx, EclAttributeGroup withinGroup) {
@@ -229,21 +380,21 @@ public class ECLQueryBuilder {
 
 			attribute.setAttributeName(build(ctx.eclattributename().subexpressionconstraint()));
 
-			ECLParser.ExpressioncomparisonoperatorContext expressioncomparisonoperator = ctx.expressioncomparisonoperator();
-			if (expressioncomparisonoperator != null) {
-				attribute.setExpressionComparisonOperator(expressioncomparisonoperator.getText());
+			ECLParser.ExpressioncomparisonoperatorContext expressionComparisonOperator = ctx.expressioncomparisonoperator();
+			if (expressionComparisonOperator != null) {
+				attribute.setExpressionComparisonOperator(expressionComparisonOperator.getText());
 				attribute.setValue(build(ctx.subexpressionconstraint()));
 			}
 
-			ECLParser.NumericcomparisonoperatorContext numericcomparisonoperator = ctx.numericcomparisonoperator();
-			if (numericcomparisonoperator != null) {
-				attribute.setNumericComparisonOperator(numericcomparisonoperator.getText());
+			ECLParser.NumericcomparisonoperatorContext numericComparisonOperator = ctx.numericcomparisonoperator();
+			if (numericComparisonOperator != null) {
+				attribute.setNumericComparisonOperator(numericComparisonOperator.getText());
 				attribute.setNumericValue(ctx.numericvalue().getText());
 			}
 
-			ECLParser.StringcomparisonoperatorContext stringcomparisonoperator = ctx.stringcomparisonoperator();
-			if (stringcomparisonoperator != null) {
-				attribute.setStringComparisonOperator(stringcomparisonoperator.getText());
+			ECLParser.StringcomparisonoperatorContext stringComparisonOperator = ctx.stringcomparisonoperator();
+			if (stringComparisonOperator != null) {
+				attribute.setStringComparisonOperator(stringComparisonOperator.getText());
 				attribute.setStringValue(ctx.stringvalue().getText());
 			}
 
