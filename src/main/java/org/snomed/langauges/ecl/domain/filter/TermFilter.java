@@ -1,52 +1,33 @@
 package org.snomed.langauges.ecl.domain.filter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.Set;
 
 public class TermFilter implements Filter {
-	private final String booleanComparisonOperator;
-	private final List<String> typedSearchTerms;
+
+	private String booleanComparisonOperator;
+	private Set<TypedSearchTerm> typedSearchTermSet;
+
+	private TermFilter() {
+	}
 
 	public TermFilter(String booleanComparisonOperator) {
 		this.booleanComparisonOperator = booleanComparisonOperator;
-		typedSearchTerms = new ArrayList<>();
+		typedSearchTermSet = new HashSet<>();
 	}
 
-	public void addTypedSearchTerm(String typedSearchTerm) {
-		typedSearchTerms.add(typedSearchTerm);
+	public void addTypedSearchTerm(TypedSearchTerm typedSearchTerm) {
+		typedSearchTermSet.add(typedSearchTerm);
 	}
 
-	public List<String> getTypedSearchTerms() {
-		return typedSearchTerms;
-	}
-
-	public static String getTerm(String typedSearchTerm) {
-		if (typedSearchTerm.contains(SearchType.MATCH.getText()) || typedSearchTerm.contains(SearchType.WILDCARD.getText())) {
-			return removeEscapedDoubleQuotes(typedSearchTerm.split(":")[1]);
-		} else {
-			return removeEscapedDoubleQuotes(typedSearchTerm);
-		}
-	}
-
-	public static SearchType getSearchType(String typedSearchTerm) {
-		if (typedSearchTerm == null) {
-			return null;
-		}
-		if (typedSearchTerm.startsWith(SearchType.WILDCARD.getText())) {
-			return SearchType.WILDCARD;
-		}
-		return SearchType.MATCH;
-	}
-
-
+	@Override
 	public String getBooleanComparisonOperator() {
-		return this.booleanComparisonOperator;
+		return booleanComparisonOperator;
 	}
 
-	private static String removeEscapedDoubleQuotes(String escapedTerm) {
-		return escapedTerm.replace("\"", "");
+	public Set<TypedSearchTerm> getTypedSearchTermSet() {
+		return typedSearchTermSet;
 	}
 
 	@Override
@@ -54,16 +35,11 @@ public class TermFilter implements Filter {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		TermFilter that = (TermFilter) o;
-		return Objects.equals(booleanComparisonOperator, that.booleanComparisonOperator) && Objects.equals(typedSearchTerms, that.typedSearchTerms);
+		return Objects.equals(booleanComparisonOperator, that.booleanComparisonOperator) && Objects.equals(typedSearchTermSet, that.typedSearchTermSet);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(booleanComparisonOperator, typedSearchTerms);
-	}
-
-	@Override
-	public String toString() {
-		return new StringJoiner(", ", TermFilter.class.getSimpleName() + "[", "]").add("booleanComparisonOperator='" + booleanComparisonOperator + "'").add("typedSearchTerms=" + typedSearchTerms).toString();
+		return Objects.hash(booleanComparisonOperator, typedSearchTermSet);
 	}
 }

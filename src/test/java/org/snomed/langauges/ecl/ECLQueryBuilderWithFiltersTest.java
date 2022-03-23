@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.snomed.langauges.ecl.domain.filter.SearchType.MATCH;
 import static org.snomed.langauges.ecl.domain.filter.SearchType.WILDCARD;
 
@@ -34,30 +33,38 @@ public class ECLQueryBuilderWithFiltersTest {
 		String ecl = "<64572001 |Disease| {{ term = \"heart att\"}}";
 		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
-		assertEquals(1, filterConstraints.get(0).getAllFilters().size());
 		List<TermFilter> termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
 		TermFilter termFilter = termFilters.get(0);
-		assertEquals(1, termFilter.getTypedSearchTerms().size());
-		String typedSearchTerm = termFilter.getTypedSearchTerms().get(0);
-		assertEquals("\"heart att\"", typedSearchTerm);
-		assertEquals("heart att", TermFilter.getTerm(typedSearchTerm));
-		assertEquals(MATCH, TermFilter.getSearchType(typedSearchTerm));
+		assertEquals("=", termFilter.getBooleanComparisonOperator());
+		Set<TypedSearchTerm> searchTerms = termFilter.getTypedSearchTermSet();
+		assertEquals(1, searchTerms.size());
+		TypedSearchTerm searchTerm = searchTerms.iterator().next();
+		assertEquals(MATCH, searchTerm.getType());
+		assertEquals("heart att", searchTerm.getTerm());
 
 		// one term per filter
 		ecl = "< 64572001 |Disease|  {{ term = \"heart\", term = \"att\"}}";
 		filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
-		assertEquals(2, filterConstraints.get(0).getAllFilters().size());
 		termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(2, termFilters.size());
-		typedSearchTerm = termFilters.get(0).getTypedSearchTerms().get(0);
-		assertEquals("heart", TermFilter.getTerm(typedSearchTerm));
-		assertEquals(MATCH, TermFilter.getSearchType(typedSearchTerm));
 
-		typedSearchTerm = termFilters.get(1).getTypedSearchTerms().get(0);
-		assertEquals("att", TermFilter.getTerm(typedSearchTerm));
-		assertEquals(MATCH, TermFilter.getSearchType(typedSearchTerm));
+		termFilter = termFilters.get(0);
+		assertEquals("=", termFilter.getBooleanComparisonOperator());
+		searchTerms = termFilter.getTypedSearchTermSet();
+		assertEquals(1, searchTerms.size());
+		searchTerm = searchTerms.iterator().next();
+		assertEquals(MATCH, searchTerm.getType());
+		assertEquals("heart", searchTerm.getTerm());
+
+		termFilter = termFilters.get(1);
+		assertEquals("=", termFilter.getBooleanComparisonOperator());
+		searchTerms = termFilter.getTypedSearchTermSet();
+		assertEquals(1, searchTerms.size());
+		searchTerm = searchTerms.iterator().next();
+		assertEquals(MATCH, searchTerm.getType());
+		assertEquals("att", searchTerm.getTerm());
 	}
 
 	@Test
@@ -68,13 +75,20 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertEquals(1, filterConstraints.size());
 		List<TermFilter> termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
-		List<String> typedSearchTerms = termFilters.get(0).getTypedSearchTerms();
-		assertEquals(2, typedSearchTerms.size());
 
-		assertEquals("gas", TermFilter.getTerm(typedSearchTerms.get(0)));
-		assertEquals(MATCH, TermFilter.getSearchType(typedSearchTerms.get(0)));
-		assertEquals("*itis", TermFilter.getTerm(typedSearchTerms.get(1)));
-		assertEquals(WILDCARD, TermFilter.getSearchType(typedSearchTerms.get(1)));
+		TermFilter termFilter = termFilters.get(0);
+		assertEquals("=", termFilter.getBooleanComparisonOperator());
+		Set<TypedSearchTerm> searchTerms = termFilter.getTypedSearchTermSet();
+		assertEquals(2, searchTerms.size());
+
+		Iterator<TypedSearchTerm> iterator = searchTerms.iterator();
+		TypedSearchTerm searchTerm = iterator.next();
+		assertEquals(MATCH, searchTerm.getType());
+		assertEquals("gas", searchTerm.getTerm());
+
+		searchTerm = iterator.next();
+		assertEquals(WILDCARD, searchTerm.getType());
+		assertEquals("*itis", searchTerm.getTerm());
 
 
 		// termSet filter
@@ -84,13 +98,19 @@ public class ECLQueryBuilderWithFiltersTest {
 
 		termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
-		typedSearchTerms = termFilters.get(0).getTypedSearchTerms();
-		assertEquals(2, typedSearchTerms.size());
 
-		assertEquals("heart", TermFilter.getTerm(typedSearchTerms.get(0)));
-		assertEquals(MATCH, TermFilter.getSearchType(typedSearchTerms.get(0)));
-		assertEquals("card", TermFilter.getTerm(typedSearchTerms.get(1)));
-		assertEquals(MATCH, TermFilter.getSearchType(typedSearchTerms.get(1)));
+		termFilter = termFilters.get(0);
+		searchTerms = termFilter.getTypedSearchTermSet();
+		assertEquals(2, searchTerms.size());
+
+		iterator = searchTerms.iterator();
+		searchTerm = iterator.next();
+		assertEquals(MATCH, searchTerm.getType());
+		assertEquals("heart", searchTerm.getTerm());
+
+		searchTerm = iterator.next();
+		assertEquals(MATCH, searchTerm.getType());
+		assertEquals("card", searchTerm.getTerm());
 	}
 
 	@Test
@@ -101,6 +121,7 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertEquals(2, filterConstraints.size());
 		List<TermFilter> termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
+		assertEquals(2, termFilters.get(0).getTypedSearchTermSet().size());
 		termFilters = filterConstraints.get(1).getTermFilters();
 		assertEquals(1, termFilters.size());
 	}
@@ -130,7 +151,7 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertEquals(2, filters.size());
 		termFilters = filterConstraints.get(1).getTermFilters();
 		assertEquals(1, termFilters.size());
-		assertEquals(2, termFilters.get(0).getTypedSearchTerms().size());
+		assertEquals(2, termFilters.get(0).getTypedSearchTermSet().size());
 
 		languageFilters = filterConstraints.get(1).getLanguageFilters();
 		assertEquals(1, languageFilters.size());
@@ -197,9 +218,11 @@ public class ECLQueryBuilderWithFiltersTest {
 		List<DialectFilter> dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(1, dialectFilters.size());
 
-		List<Dialect> dialects  = dialectFilters.get(0).getDialects();
-		assertEquals(1, dialects.size());
-		assertEquals("en-gb", dialects.iterator().next().getAlias());
+		DialectFilter dialectFilter = dialectFilters.get(0);
+		assertEquals("=", dialectFilter.getBooleanComparisonOperator());
+		List<DialectAcceptability> dialectAcceptabilities = dialectFilter.getDialectAcceptabilities();
+		assertEquals(1, dialectAcceptabilities.size());
+		assertEquals("en-gb", dialectAcceptabilities.iterator().next().getDialectAlias());
 
 		// dialectId
 		ecl = "< 64572001 |Disease|  {{ dialectId  = 900000000000508004 |Great Britain English language reference set| }}";
@@ -207,9 +230,15 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertEquals(1, filterConstraints.size());
 		dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(1, dialectFilters.size());
-		dialects = dialectFilters.get(0).getDialects();
-		assertEquals(1, dialects.size());
-		assertEquals("900000000000508004", dialects.iterator().next().getDialectId());
+		dialectFilter = dialectFilters.get(0);
+		assertEquals("=", dialectFilter.getBooleanComparisonOperator());
+		dialectAcceptabilities = dialectFilter.getDialectAcceptabilities();
+		assertEquals(1, dialectAcceptabilities.size());
+		DialectAcceptability dialectAcceptability = dialectAcceptabilities.iterator().next();
+		assertEquals("900000000000508004", dialectAcceptability.getDialectId().getConceptId());
+		assertEquals("Great Britain English language reference set", dialectAcceptability.getDialectId().getTerm());
+		assertNull(dialectAcceptability.getAcceptabilityIdSet());
+		assertNull(dialectAcceptability.getAcceptabilityTokenSet());
 
 		// mixed with alias and dialect id
 		ecl = "< 64572001 |Disease|  {{ dialectId  = 900000000000508004 }} {{ dialect = en-ie }}";
@@ -218,27 +247,36 @@ public class ECLQueryBuilderWithFiltersTest {
 		dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(1, dialectFilters.size());
 
-		dialects = dialectFilters.get(0).getDialects();
-		assertEquals(1, dialects.size());
-		assertEquals("900000000000508004", dialects.iterator().next().getDialectId());
+		dialectFilter = dialectFilters.get(0);
+		assertEquals("=", dialectFilter.getBooleanComparisonOperator());
+		dialectAcceptabilities = dialectFilter.getDialectAcceptabilities();
+		assertEquals(1, dialectAcceptabilities.size());
+		dialectAcceptability = dialectAcceptabilities.iterator().next();
+		assertEquals("900000000000508004", dialectAcceptability.getDialectId().getConceptId());
 
 		dialectFilters = filterConstraints.get(1).getDialectFilters();
+		dialectFilter = dialectFilters.get(0);
 		assertEquals(1, dialectFilters.size());
-		dialects = dialectFilters.get(0).getDialects();
-		assertEquals(1, dialects.size());
-		assertEquals("en-ie", dialects.iterator().next().getAlias());
+		assertEquals("=", dialectFilter.getBooleanComparisonOperator());
+		dialectAcceptabilities = dialectFilter.getDialectAcceptabilities();
+		assertEquals(1, dialectAcceptabilities.size());
+		dialectAcceptability = dialectAcceptabilities.iterator().next();
+		assertEquals("en-ie", dialectAcceptability.getDialectAlias());
 
 		// disjunction set
-		ecl = "<  64572001 |Disease|  {{ term = \"card\", dialect = ( en-nhs-clinical en-nhs-pharmacy ) }}";
+		ecl = "<  64572001 |Disease|  {{ term = \"card\", dialect != ( en-nhs-clinical en-nhs-pharmacy ) }}";
 		filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
 		dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(1, dialectFilters.size());
-		dialects = dialectFilters.get(0).getDialects();
-		assertEquals(2, dialects.size());
-		Iterator<Dialect> iterator = dialects.iterator();
-		assertEquals("en-nhs-clinical", iterator.next().getAlias());
-		assertEquals("en-nhs-pharmacy", iterator.next().getAlias());
+		dialectFilter = dialectFilters.get(0);
+		assertEquals("!=", dialectFilter.getBooleanComparisonOperator());
+		dialectAcceptabilities = dialectFilter.getDialectAcceptabilities();
+		assertEquals(2, dialectAcceptabilities.size());
+		assertEquals("en-nhs-clinical", dialectAcceptabilities.get(0).getDialectAlias());
+		assertEquals("en-nhs-pharmacy", dialectAcceptabilities.get(1).getDialectAlias());
+		assertNull(dialectAcceptabilities.get(0).getAcceptabilityIdSet());
+		assertNull(dialectAcceptabilities.get(0).getAcceptabilityTokenSet());
 	}
 
 	@Test
@@ -254,35 +292,30 @@ public class ECLQueryBuilderWithFiltersTest {
 
 		List<DialectFilter> dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(1, dialectFilters.size());
-		assertNotNull(dialectFilters.get(0).getAcceptabilityMap());
-		List<Dialect> dialects = dialectFilters.get(0).getDialects();
-		assertEquals(1, dialects.size());
+		assertNotNull(dialectFilters.get(0).getDialectAcceptabilities());
+		List<DialectAcceptability> dialectAcceptabilities = dialectFilters.get(0).getDialectAcceptabilities();
+		assertEquals(1, dialectAcceptabilities.size());
 
-		assertEquals("en-us", dialects.iterator().next().getAlias());
-		Set<Acceptability> acceptabilitySet = dialectFilters.get(0).getAcceptabilityMap().get(dialects.iterator().next());
-		assertEquals(1, acceptabilitySet.size());
-		assertEquals(Acceptability.PREFERRED, acceptabilitySet.iterator().next());
+		DialectAcceptability dialectAcceptability = dialectAcceptabilities.iterator().next();
+		assertEquals("en-us", dialectAcceptability.getDialectAlias());
+		assertEquals(1, dialectAcceptability.getAcceptabilityIdSet().size());
+		assertEquals("900000000000548007", dialectAcceptability.getAcceptabilityIdSet().iterator().next().getConceptId());
 
 		// dialect and acceptability set
 		ecl = "< 64572001 |Disease|  {{ term = \"box\", type = syn, dialect = ( en-gb en-nhs-clinical ) (prefer) }}";
 		filterConstraints = getFilterConstraints(ecl);
 		dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(1, dialectFilters.size());
-		dialects = dialectFilters.get(0).getDialects();
-		assertEquals(2, dialects.size());
-		assertNotNull(dialectFilters.get(0).getAcceptabilityMap());
-		Iterator<Dialect> iterator = dialects.iterator();
-
-		assertEquals("en-gb", iterator.next().getAlias());
-		assertEquals("en-nhs-clinical", iterator.next().getAlias());
-
-		acceptabilitySet = dialectFilters.get(0).getAcceptabilityMap().get(new Dialect().withAlias("en-gb"));
-		assertEquals(1, acceptabilitySet.size());
-		assertEquals(Acceptability.PREFERRED, acceptabilitySet.iterator().next());
-
-		acceptabilitySet = dialectFilters.get(0).getAcceptabilityMap().get(new Dialect().withAlias("en-nhs-clinical"));
-		assertEquals(1, acceptabilitySet.size());
-		assertEquals(Acceptability.PREFERRED, acceptabilitySet.iterator().next());
+		dialectAcceptabilities = dialectFilters.get(0).getDialectAcceptabilities();
+		assertEquals(2, dialectAcceptabilities.size());
+		dialectAcceptability = dialectAcceptabilities.get(0);
+		assertEquals("en-gb", dialectAcceptability.getDialectAlias());
+		assertEquals(1, dialectAcceptability.getAcceptabilityTokenSet().size());
+		assertEquals(Acceptability.PREFERRED, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
+		dialectAcceptability = dialectAcceptabilities.get(1);
+		assertEquals("en-nhs-clinical", dialectAcceptability.getDialectAlias());
+		assertEquals(1, dialectAcceptability.getAcceptabilityTokenSet().size());
+		assertEquals(Acceptability.PREFERRED, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
 	}
 
 	@Test
@@ -292,33 +325,50 @@ public class ECLQueryBuilderWithFiltersTest {
 		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		List<DialectFilter> dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(2, dialectFilters.size());
-		List<Dialect> dialects = dialectFilters.get(0).getDialects();
-		assertEquals(1, dialects.size());
-		Dialect dialect = dialects.iterator().next();
-		assertEquals("en-nhs-clinical", dialect.getAlias());
-		assertEquals(1, dialectFilters.get(0).getAcceptabilityMap().get(dialect).size());
-		Acceptability acceptability = dialectFilters.get(0).getAcceptabilityMap().get(dialect).iterator().next();
-		assertEquals("prefer", acceptability.getToken());
-		dialects = dialectFilters.get(1).getDialects();
-		assertEquals(1, dialects.size());
-		assertEquals("en-gb", dialects.iterator().next().getAlias());
+
+		List<DialectAcceptability> dialectAcceptabilities = dialectFilters.get(0).getDialectAcceptabilities();
+		assertEquals(1, dialectAcceptabilities.size());
+		DialectAcceptability dialectAcceptability = dialectAcceptabilities.get(0);
+		assertEquals("en-nhs-clinical", dialectAcceptability.getDialectAlias());
+		assertEquals(1, dialectAcceptability.getAcceptabilityTokenSet().size());
+		assertEquals(Acceptability.PREFERRED, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
+
+		dialectAcceptabilities = dialectFilters.get(1).getDialectAcceptabilities();
+		assertEquals(1, dialectAcceptabilities.size());
+		dialectAcceptability = dialectAcceptabilities.get(0);
+		assertEquals("en-gb", dialectAcceptability.getDialectAlias());
+		assertEquals(1, dialectAcceptability.getAcceptabilityTokenSet().size());
+		assertEquals(Acceptability.ACCEPTABLE, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
 
 		// multiple acceptability sets
 		ecl = "< 64572001 |Disease|  {{ term = \"box\", type = syn, dialect = ( en-gb (accept) en-nhs-clinical (prefer) ) }}";
 		filterConstraints = getFilterConstraints(ecl);
 		dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(1, dialectFilters.size());
-		dialects = dialectFilters.get(0).getDialects();
-		assertEquals(2, dialects.size());
+		dialectAcceptabilities = dialectFilters.get(0).getDialectAcceptabilities();
+		assertEquals(2, dialectAcceptabilities.size());
+		dialectAcceptability = dialectAcceptabilities.get(0);
+		assertEquals("en-gb", dialectAcceptability.getDialectAlias());
+		assertEquals(Acceptability.ACCEPTABLE, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
+		dialectAcceptability = dialectAcceptabilities.get(1);
+		assertEquals("en-nhs-clinical", dialectAcceptability.getDialectAlias());
+		assertEquals(Acceptability.PREFERRED, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
 
-		assertNotNull(dialectFilters.get(0).getAcceptabilityMap());
-
-		Set<Acceptability> acceptabilitySet = dialectFilters.get(0).getAcceptabilityMap().get(new Dialect().withAlias("en-gb"));
-		assertEquals(1, acceptabilitySet.size());
-		assertTrue(acceptabilitySet.contains(Acceptability.ACCEPTABLE));
-		acceptabilitySet = dialectFilters.get(0).getAcceptabilityMap().get(new Dialect().withAlias("en-nhs-clinical"));
-		assertEquals(1, acceptabilitySet.size());
-		assertEquals(Acceptability.PREFERRED, acceptabilitySet.iterator().next());
+		// First dialect has no acceptability, second does
+		// TODO: Is this valid? Ask the languages group.
+//		ecl = "< 64572001 |Disease|  {{ dialect = ( en-us en-gb (prefer) ) }}";
+//		filterConstraints = getFilterConstraints(ecl);
+//		dialectFilters = filterConstraints.get(0).getDialectFilters();
+//		assertEquals(1, dialectFilters.size());
+//		dialectAcceptabilities = dialectFilters.get(0).getDialectAcceptabilities();
+//		assertEquals(2, dialectAcceptabilities.size());
+//		dialectAcceptability = dialectAcceptabilities.get(0);
+//		assertEquals("en-us", dialectAcceptability.getDialectAlias());
+//		assertNull(dialectAcceptability.getAcceptabilityTokenSet());
+//		assertNull(dialectAcceptability.getAcceptabilityIdSet());
+//		dialectAcceptability = dialectAcceptabilities.get(1);
+//		assertEquals("en-gb", dialectAcceptability.getDialectAlias());
+//		assertEquals(Acceptability.PREFERRED, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
 	}
 
 	@Test
@@ -384,7 +434,7 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertFalse(subExpressionConstraint.getFilterConstraints().isEmpty());
 		assertEquals(1, subExpressionConstraint.getFilterConstraints().get(0).getAllFilters().size());
 		TermFilter termFilter = subExpressionConstraint.getFilterConstraints().get(0).getTermFilters().get(0);
-		assertEquals("insufficiency", TermFilter.getTerm(termFilter.getTypedSearchTerms().get(0)));
+		assertEquals("insufficiency", termFilter.getTypedSearchTermSet().iterator().next().getTerm());
 
 		// after adding bracket and the filter will apply to descendants of < 404684003 |Clinical finding|
 		ecl = "( < 404684003 |Clinical finding|  :"
@@ -399,6 +449,6 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertFalse(subExpressionConstraint.getFilterConstraints().isEmpty());
 		assertEquals(1, subExpressionConstraint.getFilterConstraints().get(0).getAllFilters().size());
 		termFilter = subExpressionConstraint.getFilterConstraints().get(0).getTermFilters().get(0);
-		assertEquals(1, termFilter.getTypedSearchTerms().size());
+		assertEquals(1, termFilter.getTypedSearchTermSet().size());
 	}
 }

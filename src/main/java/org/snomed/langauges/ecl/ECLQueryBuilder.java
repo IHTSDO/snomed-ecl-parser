@@ -3,6 +3,7 @@ package org.snomed.langauges.ecl;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.snomed.langauges.ecl.domain.ConceptReference;
 import org.snomed.langauges.ecl.domain.expressionconstraint.*;
 import org.snomed.langauges.ecl.domain.filter.*;
 import org.snomed.langauges.ecl.domain.refinement.*;
@@ -10,7 +11,10 @@ import org.snomed.langauges.ecl.generated.ImpotentECLListener;
 import org.snomed.langauges.ecl.generated.parser.ECLLexer;
 import org.snomed.langauges.ecl.generated.parser.ECLParser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ECLQueryBuilder {
@@ -136,6 +140,14 @@ public class ECLQueryBuilder {
 			return subExpressionConstraint;
 		}
 
+		private ConceptReference build(ECLParser.EclconceptreferenceContext eclconceptreference) {
+			ConceptReference conceptReference = new ConceptReference(eclconceptreference.conceptid().getText());
+			if (eclconceptreference.term() != null) {
+				conceptReference.setTerm(eclconceptreference.term().getText());
+			}
+			return conceptReference;
+		}
+
 		private List<FilterConstraint> buildFilterConstraints(List<ECLParser.FilterconstraintContext> filterConstraintContexts) {
 			final List<FilterConstraint> filterConstraints = new ArrayList<>();
 			filterConstraintContexts.forEach(constraintContext -> {
@@ -159,14 +171,36 @@ public class ECLQueryBuilder {
 			return filterConstraints;
 		}
 
-		private Filter buildFilter(ECLParser.TermfilterContext termFilterContext) {
-			TermFilter termFilter = new TermFilter(termFilterContext.booleancomparisonoperator().getText());
-			if (termFilterContext.typedsearchtermset() != null) {
-				termFilterContext.typedsearchtermset().typedsearchterm().forEach(term -> termFilter.addTypedSearchTerm(term.getText()));
-			} else if (termFilterContext.typedsearchterm() != null) {
-				termFilter.addTypedSearchTerm(termFilterContext.typedsearchterm().getText());
+		private TermFilter buildFilter(ECLParser.TermfilterContext termFilterContext) {
+			ECLParser.BooleancomparisonoperatorContext booleancomparisonoperator = termFilterContext.booleancomparisonoperator();
+			ECLParser.TypedsearchtermContext typedsearchterm = termFilterContext.typedsearchterm();
+			ECLParser.TypedsearchtermsetContext typedsearchtermset = termFilterContext.typedsearchtermset();
+
+			TermFilter filter = new TermFilter(booleancomparisonoperator.getText());
+			if (typedsearchterm != null) {
+				filter.addTypedSearchTerm(build(typedsearchterm));
+			} else {
+				for (ECLParser.TypedsearchtermContext typedsearchtermContext : typedsearchtermset.typedsearchterm()) {
+					filter.addTypedSearchTerm(build(typedsearchtermContext));
+				}
 			}
-			return termFilter;
+			return filter;
+		}
+
+		private TypedSearchTerm build(ECLParser.TypedsearchtermContext typedsearchterm) {
+			if (typedsearchterm.wild() != null) {
+				return new TypedSearchTerm(SearchType.WILDCARD, typedsearchterm.wildsearchtermset().wildsearchterm().getText());
+			} else {
+				// Match is the default
+				StringBuffer buffer = new StringBuffer();
+				for (ECLParser.MatchsearchtermContext matchsearchtermContext : typedsearchterm.matchsearchtermset().matchsearchterm()) {
+					if (buffer.length() > 0) {
+						buffer.append(" ");
+					}
+					buffer.append(matchsearchtermContext.getText());
+				}
+				return new TypedSearchTerm(SearchType.MATCH, buffer.toString());
+			}
 		}
 
 		private Filter buildFilter(ECLParser.TypefilterContext typeFilterContext) {
@@ -192,96 +226,114 @@ public class ECLQueryBuilder {
 		}
 
 		private Filter buildFilter(ECLParser.LanguagefilterContext languageFilterContext) {
-			LanguageFilter languageFilter = new LanguageFilter(languageFilterContext.booleancomparisonoperator().getText());
-			if (languageFilterContext.languagecodeset() != null) {
-				languageFilterContext.languagecodeset().languagecode().forEach(languageCode -> languageFilter.addLanguageCode(languageCode.getText()));
-			} else if (languageFilterContext.languagecode() != null) {
-				languageFilter.addLanguageCode(languageFilterContext.languagecode().getText());
+			ECLParser.BooleancomparisonoperatorContext booleancomparisonoperator = languageFilterContext.booleancomparisonoperator();
+			ECLParser.LanguagecodeContext languagecode = languageFilterContext.languagecode();
+			ECLParser.LanguagecodesetContext languagecodeset = languageFilterContext.languagecodeset();
+
+			LanguageFilter languageFilter = new LanguageFilter(booleancomparisonoperator.getText());
+			if (languagecode != null) {
+				languageFilter.addLanguageCode(languagecode.getText());
+			} else {
+				languagecodeset.languagecode().forEach(languageCode -> languageFilter.addLanguageCode(languageCode.getText()));
 			}
 			return languageFilter;
 		}
 
 		private Filter buildFilter(ECLParser.DialectfilterContext dialectFilterContext) {
-			DialectFilter dialectFilter = null;
-			if (dialectFilterContext.dialectaliasfilter() != null) {
-				// build dialect filter using alias
-				dialectFilter = buildFilter(dialectFilterContext.dialectaliasfilter());
-			} else if (dialectFilterContext.dialectidfilter() != null) {
-				dialectFilter = buildFilter(dialectFilterContext.dialectidfilter());
+			// Either this
+			ECLParser.DialectidfilterContext dialectidfilter = dialectFilterContext.dialectidfilter();
+			// Or this
+			ECLParser.DialectaliasfilterContext dialectaliasfilter = dialectFilterContext.dialectaliasfilter();
+
+			// Could be null, if not null apply to all DialectAcceptability
+			ECLParser.AcceptabilitysetContext acceptabilityset = dialectFilterContext.acceptabilityset();
+
+			DialectFilter dialectFilter;
+			if (dialectidfilter != null) {
+				dialectFilter = buildFilter(dialectidfilter);
+			} else {
+				dialectFilter = buildFilter(dialectaliasfilter);
 			}
-			// update acceptability here as in some cases they are only available at this context
-			if (dialectFilterContext.acceptabilityset() != null && dialectFilter != null) {
-				List<Acceptability> acceptabilityList = constructAcceptability(dialectFilterContext.acceptabilityset());
-				for (Dialect dialect : dialectFilter.getAcceptabilityMap().keySet()) {
-					for (Acceptability acceptability : acceptabilityList) {
-						dialectFilter.addDialect(dialect, acceptability);
-					}
+			if (acceptabilityset != null) {
+				// Apply to all
+				List<DialectAcceptability> dialectAcceptabilities = dialectFilter.getDialectAcceptabilities();
+				for (DialectAcceptability dialectAcceptability : dialectAcceptabilities) {
+					apply(dialectAcceptability, acceptabilityset);
 				}
 			}
 			return dialectFilter;
 		}
 
 		private DialectFilter buildFilter(ECLParser.DialectidfilterContext dialectIdFilterContext) {
-			final DialectFilter dialectFilter = new DialectFilter(dialectIdFilterContext.booleancomparisonoperator().getText());
-			ECLParser.DialectidsetContext dialectIdSetContext = dialectIdFilterContext.dialectidset();
-			if (dialectIdSetContext != null) {
-				List<ECLParser.AcceptabilitysetContext> acceptabilityContexts = dialectIdSetContext.acceptabilityset();
-				List<ECLParser.EclconceptreferenceContext> dialectIdContexts = dialectIdFilterContext.dialectidset().eclconceptreference();
-				for (int i = 0; i < dialectIdContexts.size(); i++) {
-					Dialect dialect = new Dialect().withDialectId(dialectIdContexts.get(0).conceptid().getText());
-					if (!acceptabilityContexts.isEmpty()) {
-						constructAcceptability(acceptabilityContexts.get(i)).forEach(acceptability -> dialectFilter.addDialect(dialect, acceptability));
-					} else {
-						dialectFilter.addDialect(dialect, null);
-					}
+			ECLParser.BooleancomparisonoperatorContext booleancomparisonoperator = dialectIdFilterContext.booleancomparisonoperator();
+			ECLParser.EclconceptreferenceContext eclconceptreference = dialectIdFilterContext.eclconceptreference();
+			ECLParser.DialectidsetContext dialectidset = dialectIdFilterContext.dialectidset();
+
+			final DialectFilter dialectFilter = new DialectFilter(booleancomparisonoperator.getText());
+			if (eclconceptreference != null) {
+				dialectFilter.addDialect(new DialectAcceptability(build(eclconceptreference)));
+			} else {
+				for (ECLParser.EclconceptreferenceContext eclconceptreferenceContext : dialectidset.eclconceptreference()) {
+					dialectFilter.addDialect(new DialectAcceptability(build(eclconceptreferenceContext)));
 				}
-			} else if (dialectIdFilterContext.dialectid() != null) {
-				String dialectId = dialectIdFilterContext.eclconceptreference().conceptid().getText();
-				dialectFilter.addDialect(new Dialect().withDialectId(dialectId), null);
+				int i = 0;
+				for (ECLParser.AcceptabilitysetContext acceptabilitysetContext : dialectidset.acceptabilityset()) {
+					apply(dialectFilter.getDialectAcceptabilities().get(i++), acceptabilitysetContext);
+				}
 			}
 			return dialectFilter;
+		}
+
+		private void apply(DialectAcceptability dialectAcceptability, ECLParser.AcceptabilitysetContext acceptabilitysetContext) {
+			ECLParser.AcceptabilityidsetContext acceptabilityidset = acceptabilitysetContext.acceptabilityidset();
+			ECLParser.AcceptabilitytokensetContext acceptabilitytokenset = acceptabilitysetContext.acceptabilitytokenset();
+			if (acceptabilityidset != null) {
+				dialectAcceptability.setAcceptabilityIdSet(build(acceptabilityidset));
+			} else if (acceptabilitytokenset != null) {
+				dialectAcceptability.setAcceptabilityTokenSet(build(acceptabilitytokenset));
+			}
+		}
+
+		private Set<ConceptReference> build(ECLParser.AcceptabilityidsetContext acceptabilityidset) {
+			return acceptabilityidset.eclconceptreferenceset().eclconceptreference().stream().map(this::build).collect(Collectors.toSet());
+		}
+
+		private Set<Acceptability> build(ECLParser.AcceptabilitytokensetContext acceptabilitytokenset) {
+			return acceptabilitytokenset.acceptabilitytoken().stream().map(this::build).collect(Collectors.toSet());
+		}
+
+		private Acceptability build(ECLParser.AcceptabilitytokenContext acceptabilitytokenContext) {
+			if (acceptabilitytokenContext.acceptable() != null) {
+				return Acceptability.ACCEPTABLE;
+			} else if (acceptabilitytokenContext.preferred() != null) {
+				return Acceptability.PREFERRED;
+			}
+			return null;
 		}
 
 		private DialectFilter buildFilter(ECLParser.DialectaliasfilterContext dialectAliasFilterContext) {
-			final DialectFilter dialectFilter = new DialectFilter(dialectAliasFilterContext.booleancomparisonoperator().getText());
-			if (dialectAliasFilterContext.dialectaliasset() != null) {
-				List<ECLParser.AcceptabilitysetContext> acceptabilityContextList = dialectAliasFilterContext.dialectaliasset().acceptabilityset();
-				List<ECLParser.DialectaliasContext> dialectAliasContexts = dialectAliasFilterContext.dialectaliasset().dialectalias();
-				for (int i = 0; i < dialectAliasContexts.size(); i++) {
-					Dialect dialect = new Dialect().withAlias(dialectAliasContexts.get(i).getText());
-					if (!acceptabilityContextList.isEmpty()) {
-						constructAcceptability(acceptabilityContextList.get(i)).forEach(acceptability -> dialectFilter.addDialect(dialect, acceptability));
-					} else {
-						dialectFilter.addDialect(dialect, null);
-					}
+			ECLParser.BooleancomparisonoperatorContext booleancomparisonoperator = dialectAliasFilterContext.booleancomparisonoperator();
+			// Either
+			ECLParser.DialectaliasContext dialectalias = dialectAliasFilterContext.dialectalias();
+			// Or
+			ECLParser.DialectaliassetContext dialectaliasset = dialectAliasFilterContext.dialectaliasset();
+
+			DialectFilter dialectFilter = new DialectFilter(booleancomparisonoperator.getText());
+			if (dialectalias != null) {
+				dialectFilter.addDialect(new DialectAcceptability(dialectalias.getText()));
+			} else {
+				List<ECLParser.DialectaliasContext> dialectaliasList = dialectaliasset.dialectalias();
+				List<ECLParser.AcceptabilitysetContext> acceptabilityset = dialectaliasset.acceptabilityset();
+
+				for (ECLParser.DialectaliasContext dialectaliasContext : dialectaliasList) {
+					dialectFilter.addDialect(new DialectAcceptability(dialectaliasContext.getText()));
 				}
-			} else if (dialectAliasFilterContext.dialectalias() != null) {
-				// acceptability will be updated later
-				dialectFilter.addDialect(new Dialect().withAlias(dialectAliasFilterContext.dialectalias().getText()), null);
+				int i = 0;
+				for (ECLParser.AcceptabilitysetContext acceptabilitysetContext : acceptabilityset) {
+					apply(dialectFilter.getDialectAcceptabilities().get(i++), acceptabilitysetContext);
+				}
 			}
 			return dialectFilter;
-		}
-
-		private List<Acceptability> constructAcceptability(ECLParser.AcceptabilitysetContext context) {
-			List<Acceptability> result = new ArrayList<>();
-			if (context.acceptabilityidset() != null) {
-				context.acceptabilityidset().eclconceptreferenceset().eclconceptreference().forEach(r -> {
-					Acceptability acceptability = Acceptability.getAcceptabilityById(r.conceptid().getText());
-					if (acceptability == null) {
-						throw new IllegalArgumentException(String.format("Unknown acceptability id %s", r.conceptid().getText()));
-					}
-					result.add(acceptability);
-				});
-			} else if (context.acceptabilitytokenset() != null) {
-				context.acceptabilitytokenset().acceptabilitytoken().forEach(r -> {
-					Acceptability acceptability = Acceptability.getAcceptabilityByToken(r.getText());
-					if (acceptability == null) {
-						throw new IllegalArgumentException(String.format("Unknown acceptability %s", r.acceptable().getText()));
-					}
-					result.add(acceptability);
-				});
-			}
-			return result;
 		}
 
 		private EclRefinement build(ECLParser.EclrefinementContext ctx) {
