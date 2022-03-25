@@ -213,7 +213,11 @@ public class ECLQueryBuilder {
 		}
 
 		private EffectiveTimeFilter buildFilter(ECLParser.EffectivetimefilterContext effectivetimefilter) {
-			TimeComparisonOperator operator = TimeComparisonOperator.fromGrammar(effectivetimefilter.timecomparisonoperator().getText());
+			String operatorText = effectivetimefilter.timecomparisonoperator().getText();
+			TimeComparisonOperator operator = TimeComparisonOperator.fromText(operatorText);
+			if (operator == null) {
+				throw new IllegalArgumentException(String.format("Time comparison operator '%s' not recognised.", operatorText));
+			}
 			Set<Integer> effectiveTimes;
 			if (effectivetimefilter.timevalue() != null) {
 				effectiveTimes = Collections.singleton(getEffectiveTime(effectivetimefilter.timevalue()));
@@ -225,7 +229,7 @@ public class ECLQueryBuilder {
 		}
 
 		private int getEffectiveTime(ECLParser.TimevalueContext timevalue) {
-			return Integer.parseInt(timevalue.toString());
+			return Integer.parseInt(timevalue.getText().replace("\"", ""));
 		}
 
 		private ActiveFilter buildFilter(ECLParser.ActivefilterContext activefilter) {
