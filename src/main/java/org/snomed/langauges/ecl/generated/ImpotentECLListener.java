@@ -779,16 +779,6 @@ public abstract class ImpotentECLListener implements ECLListener {
 	}
 
 	@Override
-	public void enterFilter(ECLParser.FilterContext ctx) {
-
-	}
-
-	@Override
-	public void exitFilter(ECLParser.FilterContext ctx) {
-
-	}
-
-	@Override
 	public void enterTermfilter(ECLParser.TermfilterContext ctx) {
 
 	}
@@ -1119,16 +1109,6 @@ public abstract class ImpotentECLListener implements ECLListener {
 	}
 
 	@Override
-	public void enterAcceptabilityidset(ECLParser.AcceptabilityidsetContext ctx) {
-
-	}
-
-	@Override
-	public void exitAcceptabilityidset(ECLParser.AcceptabilityidsetContext ctx) {
-
-	}
-
-	@Override
 	public void enterAcceptabilitytokenset(ECLParser.AcceptabilitytokensetContext ctx) {
 
 	}
@@ -1247,4 +1227,285 @@ public abstract class ImpotentECLListener implements ECLListener {
 	public void exitDash(ECLParser.DashContext ctx) {
 
 	}
+
+	@Override
+	public void enterTimecomparisonoperator(ECLParser.TimecomparisonoperatorContext ctx) {
+
+	}
+
+	@Override
+	public void exitTimecomparisonoperator(ECLParser.TimecomparisonoperatorContext ctx) {
+
+	}
+
+	@Override
+	public void enterDescriptionfilterconstraint(ECLParser.DescriptionfilterconstraintContext ctx) {
+
+	}
+
+	@Override
+	public void exitDescriptionfilterconstraint(ECLParser.DescriptionfilterconstraintContext ctx) {
+
+	}
+
+	@Override
+	public void enterDescriptionfilter(ECLParser.DescriptionfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitDescriptionfilter(ECLParser.DescriptionfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterConceptfilterconstraint(ECLParser.ConceptfilterconstraintContext ctx) {
+
+	}
+
+	@Override
+	public void exitConceptfilterconstraint(ECLParser.ConceptfilterconstraintContext ctx) {
+
+	}
+
+	@Override
+	public void enterConceptfilter(ECLParser.ConceptfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitConceptfilter(ECLParser.ConceptfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinitionstatusfilter(ECLParser.DefinitionstatusfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinitionstatusfilter(ECLParser.DefinitionstatusfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinitionstatusidfilter(ECLParser.DefinitionstatusidfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinitionstatusidfilter(ECLParser.DefinitionstatusidfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinitionstatusidkeyword(ECLParser.DefinitionstatusidkeywordContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinitionstatusidkeyword(ECLParser.DefinitionstatusidkeywordContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinitionstatustokenfilter(ECLParser.DefinitionstatustokenfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinitionstatustokenfilter(ECLParser.DefinitionstatustokenfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinitionstatuskeyword(ECLParser.DefinitionstatuskeywordContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinitionstatuskeyword(ECLParser.DefinitionstatuskeywordContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinitionstatustoken(ECLParser.DefinitionstatustokenContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinitionstatustoken(ECLParser.DefinitionstatustokenContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinitionstatustokenset(ECLParser.DefinitionstatustokensetContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinitionstatustokenset(ECLParser.DefinitionstatustokensetContext ctx) {
+
+	}
+
+	@Override
+	public void enterPrimitivetoken(ECLParser.PrimitivetokenContext ctx) {
+
+	}
+
+	@Override
+	public void exitPrimitivetoken(ECLParser.PrimitivetokenContext ctx) {
+
+	}
+
+	@Override
+	public void enterDefinedtoken(ECLParser.DefinedtokenContext ctx) {
+
+	}
+
+	@Override
+	public void exitDefinedtoken(ECLParser.DefinedtokenContext ctx) {
+
+	}
+
+	@Override
+	public void enterModulefilter(ECLParser.ModulefilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitModulefilter(ECLParser.ModulefilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterModuleidkeyword(ECLParser.ModuleidkeywordContext ctx) {
+
+	}
+
+	@Override
+	public void exitModuleidkeyword(ECLParser.ModuleidkeywordContext ctx) {
+
+	}
+
+	@Override
+	public void enterEffectivetimefilter(ECLParser.EffectivetimefilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitEffectivetimefilter(ECLParser.EffectivetimefilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterEffectivetimekeyword(ECLParser.EffectivetimekeywordContext ctx) {
+
+	}
+
+	@Override
+	public void exitEffectivetimekeyword(ECLParser.EffectivetimekeywordContext ctx) {
+
+	}
+
+	@Override
+	public void enterTimevalue(ECLParser.TimevalueContext ctx) {
+
+	}
+
+	@Override
+	public void exitTimevalue(ECLParser.TimevalueContext ctx) {
+
+	}
+
+	@Override
+	public void enterTimevalueset(ECLParser.TimevaluesetContext ctx) {
+
+	}
+
+	@Override
+	public void exitTimevalueset(ECLParser.TimevaluesetContext ctx) {
+
+	}
+
+	@Override
+	public void enterYear(ECLParser.YearContext ctx) {
+
+	}
+
+	@Override
+	public void exitYear(ECLParser.YearContext ctx) {
+
+	}
+
+	@Override
+	public void enterMonth(ECLParser.MonthContext ctx) {
+
+	}
+
+	@Override
+	public void exitMonth(ECLParser.MonthContext ctx) {
+
+	}
+
+	@Override
+	public void enterDay(ECLParser.DayContext ctx) {
+
+	}
+
+	@Override
+	public void exitDay(ECLParser.DayContext ctx) {
+
+	}
+
+	@Override
+	public void enterActivefilter(ECLParser.ActivefilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitActivefilter(ECLParser.ActivefilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterActivekeyword(ECLParser.ActivekeywordContext ctx) {
+
+	}
+
+	@Override
+	public void exitActivekeyword(ECLParser.ActivekeywordContext ctx) {
+
+	}
+
+	@Override
+	public void enterActivevalue(ECLParser.ActivevalueContext ctx) {
+
+	}
+
+	@Override
+	public void exitActivevalue(ECLParser.ActivevalueContext ctx) {
+
+	}
+
+	@Override
+	public void enterActivetruevalue(ECLParser.ActivetruevalueContext ctx) {
+
+	}
+
+	@Override
+	public void exitActivetruevalue(ECLParser.ActivetruevalueContext ctx) {
+
+	}
+
+	@Override
+	public void enterActivefalsevalue(ECLParser.ActivefalsevalueContext ctx) {
+
+	}
+
+	@Override
+	public void exitActivefalsevalue(ECLParser.ActivefalsevalueContext ctx) {
+
+	}
+
 }

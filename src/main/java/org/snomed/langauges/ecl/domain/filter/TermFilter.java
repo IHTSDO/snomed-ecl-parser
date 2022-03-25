@@ -1,20 +1,18 @@
 package org.snomed.langauges.ecl.domain.filter;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class TermFilter implements Filter {
 
 	private String booleanComparisonOperator;
-	private Set<TypedSearchTerm> typedSearchTermSet;
+	private List<TypedSearchTerm> typedSearchTermSet;
 
 	private TermFilter() {
 	}
 
 	public TermFilter(String booleanComparisonOperator) {
 		this.booleanComparisonOperator = booleanComparisonOperator;
-		typedSearchTermSet = new HashSet<>();
+		typedSearchTermSet = new ArrayList<>();
 	}
 
 	public void addTypedSearchTerm(TypedSearchTerm typedSearchTerm) {
@@ -26,7 +24,7 @@ public class TermFilter implements Filter {
 		return booleanComparisonOperator;
 	}
 
-	public Set<TypedSearchTerm> getTypedSearchTermSet() {
+	public List<TypedSearchTerm> getTypedSearchTermSet() {
 		return typedSearchTermSet;
 	}
 

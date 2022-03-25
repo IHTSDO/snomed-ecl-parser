@@ -10,9 +10,7 @@ import org.snomed.langauges.ecl.domain.refinement.EclAttribute;
 import org.snomed.langauges.ecl.domain.refinement.EclRefinement;
 import org.snomed.langauges.ecl.domain.refinement.SubAttributeSet;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.*;
 import static org.snomed.langauges.ecl.domain.filter.SearchType.MATCH;
@@ -31,13 +29,13 @@ public class ECLQueryBuilderWithFiltersTest {
 	public void testTermFilters() {
 		// term filter with multiple terms
 		String ecl = "<64572001 |Disease| {{ term = \"heart att\"}}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
 		List<TermFilter> termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
 		TermFilter termFilter = termFilters.get(0);
 		assertEquals("=", termFilter.getBooleanComparisonOperator());
-		Set<TypedSearchTerm> searchTerms = termFilter.getTypedSearchTermSet();
+		List<TypedSearchTerm> searchTerms = termFilter.getTypedSearchTermSet();
 		assertEquals(1, searchTerms.size());
 		TypedSearchTerm searchTerm = searchTerms.iterator().next();
 		assertEquals(MATCH, searchTerm.getType());
@@ -71,14 +69,14 @@ public class ECLQueryBuilderWithFiltersTest {
 	public void testFilterWithSearchedTermSet() {
 		// term set search with mixed search types
 		String ecl = "< 64572001 |Disease|  {{ term = (match:\"gas\" wild:\"*itis\")}}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
 		List<TermFilter> termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
 
 		TermFilter termFilter = termFilters.get(0);
 		assertEquals("=", termFilter.getBooleanComparisonOperator());
-		Set<TypedSearchTerm> searchTerms = termFilter.getTypedSearchTermSet();
+		List<TypedSearchTerm> searchTerms = termFilter.getTypedSearchTermSet();
 		assertEquals(2, searchTerms.size());
 
 		Iterator<TypedSearchTerm> iterator = searchTerms.iterator();
@@ -100,24 +98,24 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertEquals(1, termFilters.size());
 
 		termFilter = termFilters.get(0);
-		searchTerms = termFilter.getTypedSearchTermSet();
-		assertEquals(2, searchTerms.size());
+		List<TypedSearchTerm> searchTermsList = new ArrayList<>(termFilter.getTypedSearchTermSet());
+		assertEquals(2, searchTermsList.size());
+		searchTermsList.sort(Comparator.comparing(TypedSearchTerm::getTerm));
 
-		iterator = searchTerms.iterator();
-		searchTerm = iterator.next();
-		assertEquals(MATCH, searchTerm.getType());
-		assertEquals("heart", searchTerm.getTerm());
-
-		searchTerm = iterator.next();
+		searchTerm = searchTermsList.get(0);
 		assertEquals(MATCH, searchTerm.getType());
 		assertEquals("card", searchTerm.getTerm());
+
+		searchTerm = searchTermsList.get(1);
+		assertEquals(MATCH, searchTerm.getType());
+		assertEquals("heart", searchTerm.getTerm());
 	}
 
 	@Test
 	public void testMultipleFilterConstraints() {
 		// multiple filter constraints
 		String ecl = "< 64572001 |Disease|  {{ term = (match:\"gas\" wild:\"*itis\")}} {{ term = \"heart att\"}}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(2, filterConstraints.size());
 		List<TermFilter> termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
@@ -126,17 +124,17 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertEquals(1, termFilters.size());
 	}
 
-	private List<FilterConstraint> getFilterConstraints(String ecl) {
+	private List<DescriptionFilterConstraint> getFilterConstraints(String ecl) {
 		ExpressionConstraint query = eclQueryBuilder.createQuery(ecl);
 		assertTrue(query instanceof SubExpressionConstraint);
 		SubExpressionConstraint subExpressionConstraint = (SubExpressionConstraint) query;
-		return subExpressionConstraint.getFilterConstraints();
+		return subExpressionConstraint.getDescriptionFilterConstraints();
 	}
 
 	@Test
 	public void testMultipleLanguageFilters() {
 		String ecl = "< 64572001 |Disease|  {{ term = \"hjärt\", language = sv }} {{ term = (\"heart\" \"card\"), language = en }}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(2, filterConstraints.size());
 		List<Filter> filters = filterConstraints.get(0).getAllFilters();
 		assertEquals(2, filters.size());
@@ -172,13 +170,13 @@ public class ECLQueryBuilderWithFiltersTest {
 	public void testDescriptionTypeFilters() {
 		// type id filter
 		String ecl = "< 64572001 |Disease|  {{ term = \"box\", typeId =  900000000000013009 |Synonym|}}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
 		List<TermFilter> termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
 		List<DescriptionTypeFilter> descriptionTypeFilters = filterConstraints.get(0).getDescriptionTypeFilters();
 		assertEquals(1, descriptionTypeFilters.size());
-		assertEquals(DescriptionType.SYN, descriptionTypeFilters.get(0).getTypes().get(0));
+		assertEquals(DescriptionType.SYN.getTypeId(), descriptionTypeFilters.get(0).getSubExpressionConstraint().getConceptId());
 
 		// with type token
 		ecl = "< 64572001 |Disease|  {{ term = \"box\", language = en, type = syn }}";
@@ -194,7 +192,7 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertEquals(1, filterConstraints.size());
 		descriptionTypeFilters = filterConstraints.get(0).getDescriptionTypeFilters();
 		assertEquals(2, descriptionTypeFilters.size());
-		assertEquals(DescriptionType.SYN, descriptionTypeFilters.get(0).getTypes().get(0));
+		assertEquals(DescriptionType.SYN.getTypeId(), descriptionTypeFilters.get(0).getSubExpressionConstraint().getConceptId());
 		assertEquals(DescriptionType.FSN, descriptionTypeFilters.get(1).getTypes().get(0));
 
 		// type set
@@ -213,7 +211,7 @@ public class ECLQueryBuilderWithFiltersTest {
 	public void testDialectFilters() {
 		// dialect alias
 		String ecl = "< 64572001 |Disease|  {{ dialect = en-gb }}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
 		List<DialectFilter> dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(1, dialectFilters.size());
@@ -235,8 +233,8 @@ public class ECLQueryBuilderWithFiltersTest {
 		dialectAcceptabilities = dialectFilter.getDialectAcceptabilities();
 		assertEquals(1, dialectAcceptabilities.size());
 		DialectAcceptability dialectAcceptability = dialectAcceptabilities.iterator().next();
-		assertEquals("900000000000508004", dialectAcceptability.getDialectId().getConceptId());
-		assertEquals("Great Britain English language reference set", dialectAcceptability.getDialectId().getTerm());
+		assertEquals("900000000000508004", dialectAcceptability.getSubExpressionConstraint().getConceptId());
+		assertEquals("Great Britain English language reference set", dialectAcceptability.getSubExpressionConstraint().getTerm());
 		assertNull(dialectAcceptability.getAcceptabilityIdSet());
 		assertNull(dialectAcceptability.getAcceptabilityTokenSet());
 
@@ -252,7 +250,7 @@ public class ECLQueryBuilderWithFiltersTest {
 		dialectAcceptabilities = dialectFilter.getDialectAcceptabilities();
 		assertEquals(1, dialectAcceptabilities.size());
 		dialectAcceptability = dialectAcceptabilities.iterator().next();
-		assertEquals("900000000000508004", dialectAcceptability.getDialectId().getConceptId());
+		assertEquals("900000000000508004", dialectAcceptability.getSubExpressionConstraint().getConceptId());
 
 		dialectFilters = filterConstraints.get(1).getDialectFilters();
 		dialectFilter = dialectFilters.get(0);
@@ -283,7 +281,7 @@ public class ECLQueryBuilderWithFiltersTest {
 	public void testAcceptabilityFilters() {
 		// one dialect and acceptability
 		String ecl = "< 64572001 |Disease|  {{ term = \"box\", typeId =  900000000000013009 |Synonym| , dialect = en-us ( 900000000000548007 |Preferred| ) }}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
 		assertEquals(3, filterConstraints.get(0).getAllFilters().size());
 
@@ -322,7 +320,7 @@ public class ECLQueryBuilderWithFiltersTest {
 	public void testMultipleDialectFilters() {
 		// multiple dialects and acceptability
 		String ecl = "< 64572001 |Disease|  {{ term = \"box\", type = syn, dialect = en-nhs-clinical (prefer), dialect = en-gb (accept) }}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		List<DialectFilter> dialectFilters = filterConstraints.get(0).getDialectFilters();
 		assertEquals(2, dialectFilters.size());
 
@@ -375,7 +373,7 @@ public class ECLQueryBuilderWithFiltersTest {
 	public void testFiltersWithNegation() {
 		// term filter negation
 		String ecl = "< 125605004 |Fracture of bone|  {{ term != \"fracture\", type = syn, dialect = en-us (prefer)}}";
-		List<FilterConstraint> filterConstraints = getFilterConstraints(ecl);
+		List<DescriptionFilterConstraint> filterConstraints = getFilterConstraints(ecl);
 		assertEquals(1, filterConstraints.size());
 		List<TermFilter> termFilters = filterConstraints.get(0).getTermFilters();
 		assertEquals(1, termFilters.size());
@@ -417,7 +415,7 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertTrue(query instanceof RefinedExpressionConstraint);
 		RefinedExpressionConstraint refinedExpressionConstraint = (RefinedExpressionConstraint) query;
 		assertEquals("404684003", refinedExpressionConstraint.getSubexpressionConstraint().getConceptId());
-		assertTrue(refinedExpressionConstraint.getSubexpressionConstraint().getFilterConstraints().isEmpty());
+		assertNull(refinedExpressionConstraint.getSubexpressionConstraint().getDescriptionFilterConstraints());
 
 		EclRefinement eclRefinement = refinedExpressionConstraint.getEclRefinement();
 		EclAttribute attribute = eclRefinement.getSubRefinement().getEclAttributeSet().getSubAttributeSet().getAttribute();
@@ -430,10 +428,10 @@ public class ECLQueryBuilderWithFiltersTest {
 		SubExpressionConstraint subExpressionConstraint = attributeSet.get(0).getAttribute().getValue();
 		assertNotNull(subExpressionConstraint);
 		assertEquals("415582006", subExpressionConstraint.getConceptId());
-		assertNotNull(subExpressionConstraint.getFilterConstraints());
-		assertFalse(subExpressionConstraint.getFilterConstraints().isEmpty());
-		assertEquals(1, subExpressionConstraint.getFilterConstraints().get(0).getAllFilters().size());
-		TermFilter termFilter = subExpressionConstraint.getFilterConstraints().get(0).getTermFilters().get(0);
+		assertNotNull(subExpressionConstraint.getDescriptionFilterConstraints());
+		assertFalse(subExpressionConstraint.getDescriptionFilterConstraints().isEmpty());
+		assertEquals(1, subExpressionConstraint.getDescriptionFilterConstraints().get(0).getAllFilters().size());
+		TermFilter termFilter = subExpressionConstraint.getDescriptionFilterConstraints().get(0).getTermFilters().get(0);
 		assertEquals("insufficiency", termFilter.getTypedSearchTermSet().iterator().next().getTerm());
 
 		// after adding bracket and the filter will apply to descendants of < 404684003 |Clinical finding|
@@ -445,10 +443,10 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertTrue(query instanceof SubExpressionConstraint);
 		subExpressionConstraint = (SubExpressionConstraint) query;
 		assertNotNull(subExpressionConstraint.getNestedExpressionConstraint());
-		assertNotNull(subExpressionConstraint.getFilterConstraints());
-		assertFalse(subExpressionConstraint.getFilterConstraints().isEmpty());
-		assertEquals(1, subExpressionConstraint.getFilterConstraints().get(0).getAllFilters().size());
-		termFilter = subExpressionConstraint.getFilterConstraints().get(0).getTermFilters().get(0);
+		assertNotNull(subExpressionConstraint.getDescriptionFilterConstraints());
+		assertFalse(subExpressionConstraint.getDescriptionFilterConstraints().isEmpty());
+		assertEquals(1, subExpressionConstraint.getDescriptionFilterConstraints().get(0).getAllFilters().size());
+		termFilter = subExpressionConstraint.getDescriptionFilterConstraints().get(0).getTermFilters().get(0);
 		assertEquals(1, termFilter.getTypedSearchTermSet().size());
 	}
 }

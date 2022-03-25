@@ -1,8 +1,10 @@
 package org.snomed.langauges.ecl.domain.expressionconstraint;
 
-import org.snomed.langauges.ecl.domain.filter.FilterConstraint;
+import org.snomed.langauges.ecl.domain.filter.ConceptFilterConstraint;
+import org.snomed.langauges.ecl.domain.filter.DescriptionFilterConstraint;
 import org.snomed.langauges.ecl.domain.refinement.Operator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SubExpressionConstraint implements ExpressionConstraint {
@@ -12,10 +14,25 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 	protected String term;
 	protected boolean wildcard;
 	protected ExpressionConstraint nestedExpressionConstraint;
-	protected List<FilterConstraint> filterConstraints;
+	protected List<ConceptFilterConstraint> conceptFilterConstraints;
+	protected List<DescriptionFilterConstraint> descriptionFilterConstraints;
 
 	public SubExpressionConstraint(Operator operator) {
 		this.operator = operator;
+	}
+
+	public void addConceptFilterConstraint(ConceptFilterConstraint conceptFilterConstraint) {
+		if (conceptFilterConstraints == null) {
+			conceptFilterConstraints = new ArrayList<>();
+		}
+		conceptFilterConstraints.add(conceptFilterConstraint);
+	}
+
+	public void addDescriptionFilterConstraint(DescriptionFilterConstraint descriptionFilterConstraint) {
+		if (descriptionFilterConstraints == null) {
+			descriptionFilterConstraints = new ArrayList<>();
+		}
+		descriptionFilterConstraints.add(descriptionFilterConstraint);
 	}
 
 	public void setConceptId(String conceptId) {
@@ -32,8 +49,8 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		this.nestedExpressionConstraint = nestedExpressionConstraint;
 	}
 
-	public void setFilterConstraints(List<FilterConstraint> filterConstraints) {
-		this.filterConstraints = filterConstraints;
+	public void setDescriptionFilterConstraints(List<DescriptionFilterConstraint> descriptionFilterConstraints) {
+		this.descriptionFilterConstraints = descriptionFilterConstraints;
 	}
 
 	public Operator getOperator() {
@@ -54,8 +71,12 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		return nestedExpressionConstraint;
 	}
 
-	public List<FilterConstraint> getFilterConstraints() {
-		return filterConstraints;
+	public List<ConceptFilterConstraint> getConceptFilterConstraints() {
+		return conceptFilterConstraints;
+	}
+
+	public List<DescriptionFilterConstraint> getDescriptionFilterConstraints() {
+		return descriptionFilterConstraints;
 	}
 
 	@Override
@@ -66,7 +87,7 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 				", term=" + term +
 				", wildcard=" + wildcard +
 				", nestedExpressionConstraint=" + nestedExpressionConstraint +
-				", filterConstraints=" + filterConstraints +
+				", filterConstraints=" + descriptionFilterConstraints +
 				'}';
 	}
 }

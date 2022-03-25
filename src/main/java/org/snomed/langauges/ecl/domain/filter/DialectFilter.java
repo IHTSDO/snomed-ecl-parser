@@ -1,5 +1,7 @@
 package org.snomed.langauges.ecl.domain.filter;
 
+import org.snomed.langauges.ecl.domain.expressionconstraint.SubExpressionConstraint;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -8,8 +10,8 @@ import java.util.StringJoiner;
 public class DialectFilter implements Filter {
 
 	private final String booleanComparisonOperator;
-
 	private final List<DialectAcceptability> dialectAcceptabilities;
+	private SubExpressionConstraint subExpressionConstraint;
 
 	public DialectFilter(String booleanComparisonOperator) {
 		this.booleanComparisonOperator = booleanComparisonOperator;
@@ -27,6 +29,14 @@ public class DialectFilter implements Filter {
 
 	public List<DialectAcceptability> getDialectAcceptabilities() {
 		return dialectAcceptabilities;
+	}
+
+	public SubExpressionConstraint getSubExpressionConstraint() {
+		return subExpressionConstraint;
+	}
+
+	public void setSubExpressionConstraint(SubExpressionConstraint subExpressionConstraint) {
+		this.subExpressionConstraint = subExpressionConstraint;
 	}
 
 	@Override
