@@ -1,20 +1,35 @@
 package org.snomed.langauges.ecl.domain.refinement;
 
 import org.snomed.langauges.ecl.domain.expressionconstraint.SubExpressionConstraint;
+import org.snomed.langauges.ecl.domain.filter.TypedSearchTerm;
+
+import java.util.List;
 
 public class EclAttribute implements Refinement {
 
-	protected SubExpressionConstraint attributeName;
-	protected String expressionComparisonOperator;
-	protected SubExpressionConstraint value;
-	protected boolean reverse;
 	protected EclAttributeGroup parentGroup;
+
 	protected Integer cardinalityMin = 1;
 	protected Integer cardinalityMax;
+
+	protected boolean reverse;
+	protected SubExpressionConstraint attributeName;
+
+	// Either
+	protected String expressionComparisonOperator;
+	protected SubExpressionConstraint value;
+
+	// OR
 	private String numericComparisonOperator;
 	private String numericValue;
+
+	// OR
 	private String stringComparisonOperator;
-	private String stringValue;
+	private List<TypedSearchTerm> stringValues;
+
+	// OR
+	private String booleanComparisonOperator;
+	private Boolean booleanValue;
 
 	public void setAttributeName(SubExpressionConstraint attributeName) {
 		this.attributeName = attributeName;
@@ -96,12 +111,28 @@ public class EclAttribute implements Refinement {
 		return stringComparisonOperator;
 	}
 
-	public void setStringValue(String stringValue) {
-		this.stringValue = stringValue;
+	public void setStringValues(List<TypedSearchTerm> stringValues) {
+		this.stringValues = stringValues;
 	}
 
-	public String getStringValue() {
-		return stringValue;
+	public List<TypedSearchTerm> getStringValues() {
+		return stringValues;
+	}
+
+	public void setBooleanComparisonOperator(String booleanComparisonOperator) {
+		this.booleanComparisonOperator = booleanComparisonOperator;
+	}
+
+	public String getBooleanComparisonOperator() {
+		return booleanComparisonOperator;
+	}
+
+	public void setBooleanValue(Boolean booleanValue) {
+		this.booleanValue = booleanValue;
+	}
+
+	public Boolean getBooleanValue() {
+		return booleanValue;
 	}
 
 	@Override

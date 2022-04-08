@@ -6,6 +6,10 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.snomed.langauges.ecl.generated.parser.ECLListener;
 import org.snomed.langauges.ecl.generated.parser.ECLParser;
 
+/**
+ * This manually maintained abstract class implements all methods of the generated interface ECLListener.
+ * Its purpose is to satisfy the compiler and allow implementations of this class to only override the methods they need.
+ */
 public abstract class ImpotentECLListener implements ECLListener {
 
 	@Override
@@ -769,16 +773,6 @@ public abstract class ImpotentECLListener implements ECLListener {
 	}
 
 	@Override
-	public void enterFilterconstraint(ECLParser.FilterconstraintContext ctx) {
-
-	}
-
-	@Override
-	public void exitFilterconstraint(ECLParser.FilterconstraintContext ctx) {
-
-	}
-
-	@Override
 	public void enterTermfilter(ECLParser.TermfilterContext ctx) {
 
 	}
@@ -1508,4 +1502,153 @@ public abstract class ImpotentECLListener implements ECLListener {
 
 	}
 
+	@Override
+	public void enterRefsetfieldset(ECLParser.RefsetfieldsetContext ctx) {
+
+	}
+
+	@Override
+	public void exitRefsetfieldset(ECLParser.RefsetfieldsetContext ctx) {
+
+	}
+
+	@Override
+	public void enterRefsetfield(ECLParser.RefsetfieldContext ctx) {
+
+	}
+
+	@Override
+	public void exitRefsetfield(ECLParser.RefsetfieldContext ctx) {
+
+	}
+
+	@Override
+	public void enterRefsetfieldname(ECLParser.RefsetfieldnameContext ctx) {
+
+	}
+
+	@Override
+	public void exitRefsetfieldname(ECLParser.RefsetfieldnameContext ctx) {
+
+	}
+
+	@Override
+	public void enterRefsetfieldref(ECLParser.RefsetfieldrefContext ctx) {
+
+	}
+
+	@Override
+	public void exitRefsetfieldref(ECLParser.RefsetfieldrefContext ctx) {
+
+	}
+
+	@Override
+	public void enterAcceptabilityconceptreferenceset(ECLParser.AcceptabilityconceptreferencesetContext ctx) {
+
+	}
+
+	@Override
+	public void exitAcceptabilityconceptreferenceset(ECLParser.AcceptabilityconceptreferencesetContext ctx) {
+
+	}
+
+	@Override
+	public void enterMemberfilterconstraint(ECLParser.MemberfilterconstraintContext ctx) {
+
+	}
+
+	@Override
+	public void exitMemberfilterconstraint(ECLParser.MemberfilterconstraintContext ctx) {
+
+	}
+
+	@Override
+	public void enterMemberfilter(ECLParser.MemberfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitMemberfilter(ECLParser.MemberfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterMemberfieldfilter(ECLParser.MemberfieldfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitMemberfieldfilter(ECLParser.MemberfieldfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterHistorysupplement(ECLParser.HistorysupplementContext ctx) {
+
+	}
+
+	@Override
+	public void exitHistorysupplement(ECLParser.HistorysupplementContext ctx) {
+
+	}
+
+	@Override
+	public void enterHistorykeyword(ECLParser.HistorykeywordContext ctx) {
+
+	}
+
+	@Override
+	public void exitHistorykeyword(ECLParser.HistorykeywordContext ctx) {
+
+	}
+
+	@Override
+	public void enterHistoryprofilesuffix(ECLParser.HistoryprofilesuffixContext ctx) {
+
+	}
+
+	@Override
+	public void exitHistoryprofilesuffix(ECLParser.HistoryprofilesuffixContext ctx) {
+
+	}
+
+	@Override
+	public void enterHistoryminimumsuffix(ECLParser.HistoryminimumsuffixContext ctx) {
+
+	}
+
+	@Override
+	public void exitHistoryminimumsuffix(ECLParser.HistoryminimumsuffixContext ctx) {
+
+	}
+
+	@Override
+	public void enterHistorymoderatesuffix(ECLParser.HistorymoderatesuffixContext ctx) {
+
+	}
+
+	@Override
+	public void exitHistorymoderatesuffix(ECLParser.HistorymoderatesuffixContext ctx) {
+
+	}
+
+	@Override
+	public void enterHistorymaximumsuffix(ECLParser.HistorymaximumsuffixContext ctx) {
+
+	}
+
+	@Override
+	public void exitHistorymaximumsuffix(ECLParser.HistorymaximumsuffixContext ctx) {
+
+	}
+
+	@Override
+	public void enterHistorysubset(ECLParser.HistorysubsetContext ctx) {
+
+	}
+
+	@Override
+	public void exitHistorysubset(ECLParser.HistorysubsetContext ctx) {
+
+	}
 }

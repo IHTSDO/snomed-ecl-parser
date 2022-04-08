@@ -1,13 +1,16 @@
 package org.snomed.langauges.ecl.domain.filter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TermFilter implements Filter {
+public class TermFilter {
 
 	private String booleanComparisonOperator;
 	private List<TypedSearchTerm> typedSearchTermSet;
 
-	private TermFilter() {
+	@SuppressWarnings("unused")
+	protected TermFilter() {
+		// For JSON
 	}
 
 	public TermFilter(String booleanComparisonOperator) {
@@ -19,7 +22,6 @@ public class TermFilter implements Filter {
 		typedSearchTermSet.add(typedSearchTerm);
 	}
 
-	@Override
 	public String getBooleanComparisonOperator() {
 		return booleanComparisonOperator;
 	}
@@ -28,16 +30,4 @@ public class TermFilter implements Filter {
 		return typedSearchTermSet;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		TermFilter that = (TermFilter) o;
-		return Objects.equals(booleanComparisonOperator, that.booleanComparisonOperator) && Objects.equals(typedSearchTermSet, that.typedSearchTermSet);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(booleanComparisonOperator, typedSearchTermSet);
-	}
 }

@@ -4,14 +4,18 @@ import org.snomed.langauges.ecl.domain.expressionconstraint.SubExpressionConstra
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.StringJoiner;
 
-public class DescriptionTypeFilter implements Filter {
+public class DescriptionTypeFilter {
 
-	private final String booleanComparisonOperator;
+	private String booleanComparisonOperator;
 	private List<DescriptionType> types;
 	private SubExpressionConstraint subExpressionConstraint;
+
+	@SuppressWarnings("unused")
+	protected DescriptionTypeFilter() {
+		// For JSON
+	}
 
 	public DescriptionTypeFilter(String booleanComparisonOperator) {
 		this.booleanComparisonOperator = booleanComparisonOperator;
@@ -24,7 +28,6 @@ public class DescriptionTypeFilter implements Filter {
 		types.add(type);
 	}
 
-	@Override
 	public String getBooleanComparisonOperator() {
 		return this.booleanComparisonOperator;
 	}
@@ -39,19 +42,6 @@ public class DescriptionTypeFilter implements Filter {
 
 	public void setSubExpressionConstraint(SubExpressionConstraint subExpressionConstraint) {
 		this.subExpressionConstraint = subExpressionConstraint;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		DescriptionTypeFilter that = (DescriptionTypeFilter) o;
-		return Objects.equals(types, that.types) && Objects.equals(booleanComparisonOperator, that.booleanComparisonOperator);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(types, booleanComparisonOperator);
 	}
 
 	@Override

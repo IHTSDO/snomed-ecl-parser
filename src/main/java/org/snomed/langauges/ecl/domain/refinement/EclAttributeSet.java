@@ -37,6 +37,10 @@ public class EclAttributeSet implements Refinement {
 		return disjunctionAttributeSet;
 	}
 
+	public void setParentGroup(EclAttributeGroup parentGroup) {
+		this.parentGroup = parentGroup;
+	}
+
 	@Override
 	public String toString() {
 		return "EclAttributeSet{" +
@@ -45,10 +49,6 @@ public class EclAttributeSet implements Refinement {
 				", conjunctionAttributeSet=" + conjunctionAttributeSet +
 				", disjunctionAttributeSet=" + disjunctionAttributeSet +
 				'}';
-	}
-
-	public void setParentGroup(EclAttributeGroup parentGroup) {
-		this.parentGroup = parentGroup;
 	}
 
 }

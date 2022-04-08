@@ -2,6 +2,8 @@ package org.snomed.langauges.ecl.domain.expressionconstraint;
 
 import org.snomed.langauges.ecl.domain.filter.ConceptFilterConstraint;
 import org.snomed.langauges.ecl.domain.filter.DescriptionFilterConstraint;
+import org.snomed.langauges.ecl.domain.filter.HistorySupplement;
+import org.snomed.langauges.ecl.domain.filter.MemberFilterConstraint;
 import org.snomed.langauges.ecl.domain.refinement.Operator;
 
 import java.util.ArrayList;
@@ -16,6 +18,10 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 	protected ExpressionConstraint nestedExpressionConstraint;
 	protected List<ConceptFilterConstraint> conceptFilterConstraints;
 	protected List<DescriptionFilterConstraint> descriptionFilterConstraints;
+	protected List<MemberFilterConstraint> memberFilterConstraints;
+	private HistorySupplement historySupplement;
+	private List<String> memberFieldsToReturn;
+	private boolean returnAllMemberFields;
 
 	public SubExpressionConstraint(Operator operator) {
 		this.operator = operator;
@@ -35,6 +41,13 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		descriptionFilterConstraints.add(descriptionFilterConstraint);
 	}
 
+	public void addMemberFilterConstraint(MemberFilterConstraint memberFilterConstraint) {
+		if (memberFilterConstraints == null) {
+			memberFilterConstraints = new ArrayList<>();
+		}
+		memberFilterConstraints.add(memberFilterConstraint);
+	}
+
 	public void setConceptId(String conceptId) {
 		this.conceptId = conceptId;
 	}
@@ -51,6 +64,22 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 
 	public void setDescriptionFilterConstraints(List<DescriptionFilterConstraint> descriptionFilterConstraints) {
 		this.descriptionFilterConstraints = descriptionFilterConstraints;
+	}
+
+	public void setMemberFilterConstraints(List<MemberFilterConstraint> memberFilterConstraints) {
+		this.memberFilterConstraints = memberFilterConstraints;
+	}
+
+	public void setHistorySupplement(HistorySupplement historySupplement) {
+		this.historySupplement = historySupplement;
+	}
+
+	public void setMemberFieldsToReturn(List<String> memberFieldsToReturn) {
+		this.memberFieldsToReturn = memberFieldsToReturn;
+	}
+
+	public void setReturnAllMemberFields(boolean returnAllMemberFields) {
+		this.returnAllMemberFields = returnAllMemberFields;
 	}
 
 	public Operator getOperator() {
@@ -79,6 +108,22 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		return descriptionFilterConstraints;
 	}
 
+	public List<MemberFilterConstraint> getMemberFilterConstraints() {
+		return memberFilterConstraints;
+	}
+
+	public HistorySupplement getHistorySupplement() {
+		return historySupplement;
+	}
+
+	public List<String> getMemberFieldsToReturn() {
+		return memberFieldsToReturn;
+	}
+
+	public boolean isReturnAllMemberFields() {
+		return returnAllMemberFields;
+	}
+
 	@Override
 	public String toString() {
 		return "SubExpressionConstraint{" +
@@ -87,7 +132,9 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 				", term=" + term +
 				", wildcard=" + wildcard +
 				", nestedExpressionConstraint=" + nestedExpressionConstraint +
-				", filterConstraints=" + descriptionFilterConstraints +
+				", descriptionFilterConstraints=" + descriptionFilterConstraints +
+				", conceptFilterConstraints=" + conceptFilterConstraints +
+				", memberFilterConstraints=" + memberFilterConstraints +
 				'}';
 	}
 }

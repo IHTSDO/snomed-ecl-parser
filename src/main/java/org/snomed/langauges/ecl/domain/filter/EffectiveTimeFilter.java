@@ -7,7 +7,9 @@ public class EffectiveTimeFilter {
 	private TimeComparisonOperator operator;
 	private Set<Integer> effectiveTime;
 
-	private EffectiveTimeFilter() {
+	@SuppressWarnings("unused")
+	protected EffectiveTimeFilter() {
+		// For JSON
 	}
 
 	public EffectiveTimeFilter(TimeComparisonOperator operator, Set<Integer> effectiveTime) {
@@ -22,4 +24,5 @@ public class EffectiveTimeFilter {
 	public Set<Integer> getEffectiveTime() {
 		return effectiveTime;
 	}
+
 }

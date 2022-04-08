@@ -2,42 +2,91 @@ package org.snomed.langauges.ecl.domain.filter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class DescriptionFilterConstraint {
 
-	private final List<Filter> filters;
+	private List<TermFilter> termFilters;
+	private List<DescriptionTypeFilter> descriptionTypeFilters;
+	private List<LanguageFilter> languageFilters;
+	private List<DialectFilter> dialectFilters;
+	private List<FieldFilter> moduleFilters;
+	private List<EffectiveTimeFilter> effectiveTimeFilters;
+	private List<ActiveFilter> activeFilters;
 
-	public DescriptionFilterConstraint() {
-		filters = new ArrayList<>();
+	public void addFilter(TermFilter filter) {
+		if (termFilters == null) {
+			termFilters = new ArrayList<>();
+		}
+		termFilters.add(filter);
 	}
 
-	public void addFilter(Filter filter) {
-		this.filters.add(filter);
+	public void addFilter(DescriptionTypeFilter typeFilter) {
+		if (descriptionTypeFilters == null) {
+			descriptionTypeFilters = new ArrayList<>();
+		}
+		descriptionTypeFilters.add(typeFilter);
 	}
 
-	public List<Filter> getAllFilters() {
-		return filters;
+	public void addFilter(LanguageFilter languageFilter) {
+		if (languageFilters == null) {
+			languageFilters = new ArrayList<>();
+		}
+		languageFilters.add(languageFilter);
 	}
 
-	private <T extends Filter> List<T> getFilters(Class<T> clazz) {
-		return filters.stream().filter(clazz::isInstance).map(clazz::cast).collect(Collectors.toList());
+	public void addFilter(DialectFilter dialectFilter) {
+		if (dialectFilters == null) {
+			dialectFilters = new ArrayList<>();
+		}
+		dialectFilters.add(dialectFilter);
+	}
+
+	public void addFilter(FieldFilter moduleFilter) {
+		if (moduleFilter == null) {
+			moduleFilters = new ArrayList<>();
+		}
+		moduleFilters.add(moduleFilter);
+	}
+
+	public void addFilter(EffectiveTimeFilter effectiveTimeFilter) {
+		if (effectiveTimeFilters == null) {
+			effectiveTimeFilters = new ArrayList<>();
+		}
+		effectiveTimeFilters.add(effectiveTimeFilter);
+	}
+
+	public void addFilter(ActiveFilter activeFilter) {
+		if (activeFilters == null) {
+			activeFilters = new ArrayList<>();
+		}
+		activeFilters.add(activeFilter);
 	}
 
 	public List<TermFilter> getTermFilters() {
-		return getFilters(TermFilter.class);
+		return termFilters;
 	}
 
 	public List<DescriptionTypeFilter> getDescriptionTypeFilters() {
-		return getFilters(DescriptionTypeFilter.class);
+		return descriptionTypeFilters;
 	}
 
 	public List<LanguageFilter> getLanguageFilters() {
-		return getFilters(LanguageFilter.class);
+		return languageFilters;
 	}
 
 	public List<DialectFilter> getDialectFilters() {
-		return getFilters(DialectFilter.class);
+		return dialectFilters;
 	}
 
+	public List<FieldFilter> getModuleFilters() {
+		return moduleFilters;
+	}
+
+	public List<EffectiveTimeFilter> getEffectiveTimeFilters() {
+		return effectiveTimeFilters;
+	}
+
+	public List<ActiveFilter> getActiveFilters() {
+		return activeFilters;
+	}
 }

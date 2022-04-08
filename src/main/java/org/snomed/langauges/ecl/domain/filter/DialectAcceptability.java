@@ -3,7 +3,6 @@ package org.snomed.langauges.ecl.domain.filter;
 import org.snomed.langauges.ecl.domain.ConceptReference;
 import org.snomed.langauges.ecl.domain.expressionconstraint.SubExpressionConstraint;
 
-import java.util.Objects;
 import java.util.Set;
 
 public class DialectAcceptability {
@@ -19,7 +18,7 @@ public class DialectAcceptability {
 
 	@SuppressWarnings("unused")
 	// For JSON
-	private DialectAcceptability() {
+	protected DialectAcceptability() {
 	}
 
 	public DialectAcceptability(ConceptReference dialectId) {
@@ -32,6 +31,10 @@ public class DialectAcceptability {
 
 	public DialectAcceptability(String dialectAlias) {
 		this.dialectAlias = dialectAlias;
+	}
+
+	public ConceptReference getDialectId() {
+		return dialectId;
 	}
 
 	public SubExpressionConstraint getSubExpressionConstraint() {
@@ -58,16 +61,4 @@ public class DialectAcceptability {
 		this.acceptabilityTokenSet = acceptabilityTokenSet;
 	}
 
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		DialectAcceptability that = (DialectAcceptability) o;
-		return Objects.equals(dialectId, that.dialectId) && Objects.equals(dialectAlias, that.dialectAlias) && Objects.equals(acceptabilityIdSet, that.acceptabilityIdSet) && Objects.equals(acceptabilityTokenSet, that.acceptabilityTokenSet);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(dialectId, dialectAlias, acceptabilityIdSet, acceptabilityTokenSet);
-	}
 }

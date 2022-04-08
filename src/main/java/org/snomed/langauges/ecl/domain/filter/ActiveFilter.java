@@ -4,7 +4,9 @@ public class ActiveFilter {
 
 	private boolean active;
 
-	private ActiveFilter() {
+	@SuppressWarnings("unused")
+	protected ActiveFilter() {
+		// For JSON
 	}
 
 	public ActiveFilter(boolean active) {

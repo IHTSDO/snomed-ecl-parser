@@ -13,7 +13,9 @@ public class FieldFilter {
 	private List<ConceptReference> conceptReferences;
 	private SubExpressionConstraint subExpressionConstraint;
 
-	private FieldFilter() {
+	@SuppressWarnings("unused")
+	protected FieldFilter() {
+		// For JSON
 	}
 
 	public FieldFilter(String field, boolean equals) {
@@ -47,4 +49,5 @@ public class FieldFilter {
 	public SubExpressionConstraint getSubExpressionConstraint() {
 		return subExpressionConstraint;
 	}
+
 }

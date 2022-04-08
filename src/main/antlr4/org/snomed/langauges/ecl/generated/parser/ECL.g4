@@ -7,12 +7,16 @@ disjunctionexpressionconstraint : subexpressionconstraint (ws disjunction ws sub
 exclusionexpressionconstraint : subexpressionconstraint ws exclusion ws subexpressionconstraint;
 dottedexpressionconstraint : subexpressionconstraint (ws dottedexpressionattribute)+;
 dottedexpressionattribute : dot ws eclattributename;
-subexpressionconstraint : (constraintoperator ws)? (memberof ws)? (eclfocusconcept | (LEFT_PAREN ws expressionconstraint ws RIGHT_PAREN)) (ws filterconstraint)*;
+subexpressionconstraint: (constraintoperator ws)? ( ( (memberof ws)? (eclfocusconcept | (LEFT_PAREN ws expressionconstraint ws RIGHT_PAREN)) (ws memberfilterconstraint)*) | (eclfocusconcept | (LEFT_PAREN ws expressionconstraint ws RIGHT_PAREN)) ) (ws (descriptionfilterconstraint | conceptfilterconstraint))* (ws historysupplement)?;
 eclfocusconcept : eclconceptreference | wildcard;
 dot : PERIOD;
-memberof : CARAT;
+memberof : CARAT ( ws LEFT_BRACE ws (refsetfieldset | wildcard) ws RIGHT_BRACE )?;
+refsetfieldset : refsetfield (ws COMMA ws refsetfield)*;
+refsetfield : refsetfieldname | refsetfieldref;
+refsetfieldname : alpha+;
+refsetfieldref : eclconceptreference;
 eclconceptreference : conceptid (ws PIPE ws term ws PIPE)?;
-eclconceptreferenceset : LEFT_PAREN ws eclconceptreference (mws eclconceptreference)* ws RIGHT_PAREN;
+eclconceptreferenceset : LEFT_PAREN ws eclconceptreference (mws eclconceptreference)+ ws RIGHT_PAREN;
 conceptid : sctid;
 term : nonwsnonpipe+ ( sp+ nonwsnonpipe+ )*;
 wildcard : ASTERISK;
@@ -37,7 +41,7 @@ conjunctionattributeset : (ws conjunction ws subattributeset)+;
 disjunctionattributeset : (ws disjunction ws subattributeset)+;
 subattributeset : eclattribute | (LEFT_PAREN ws eclattributeset ws RIGHT_PAREN);
 eclattributegroup : (LEFT_BRACE cardinality RIGHT_BRACE ws)? LEFT_CURLY_BRACE ws eclattributeset ws RIGHT_CURLY_BRACE;
-eclattribute : (LEFT_BRACE cardinality RIGHT_BRACE ws)? (reverseflag ws)? eclattributename ws ((expressioncomparisonoperator ws subexpressionconstraint) | (numericcomparisonoperator ws HASH numericvalue) | (stringcomparisonoperator ws qm stringvalue qm) | (booleancomparisonoperator ws booleanvalue));
+eclattribute : (LEFT_BRACE cardinality RIGHT_BRACE ws)? (reverseflag ws)? eclattributename ws ((expressioncomparisonoperator ws subexpressionconstraint) | (numericcomparisonoperator ws HASH numericvalue) | (stringcomparisonoperator ws (typedsearchterm | typedsearchtermset)) | (booleancomparisonoperator ws booleanvalue));
 cardinality : minvalue to maxvalue;
 minvalue : nonnegativeintegervalue;
 to : (PERIOD PERIOD);
@@ -50,10 +54,9 @@ numericcomparisonoperator : EQUALS | (EXCLAMATION EQUALS) | (LESS_THAN EQUALS) |
 timecomparisonoperator : EQUALS | (EXCLAMATION EQUALS) | (LESS_THAN EQUALS) | LESS_THAN | (GREATER_THAN EQUALS) | GREATER_THAN;
 stringcomparisonoperator : EQUALS | (EXCLAMATION EQUALS);
 booleancomparisonoperator : EQUALS | (EXCLAMATION EQUALS);
-filterconstraint : descriptionfilterconstraint | conceptfilterconstraint;
 descriptionfilterconstraint : (LEFT_CURLY_BRACE LEFT_CURLY_BRACE) ws ( (CAP_D | D) | (CAP_D | D) )? ws descriptionfilter (ws COMMA ws descriptionfilter)* ws (RIGHT_CURLY_BRACE RIGHT_CURLY_BRACE);
-descriptionfilter : termfilter | languagefilter | typefilter | dialectfilter;
-termfilter : termkeyword ws booleancomparisonoperator ws (typedsearchterm | typedsearchtermset);
+descriptionfilter : termfilter | languagefilter | typefilter | dialectfilter | modulefilter | effectivetimefilter | activefilter;
+termfilter : termkeyword ws stringcomparisonoperator ws (typedsearchterm | typedsearchtermset);
 termkeyword : ((CAP_T | T)|(CAP_T | T)) ((CAP_E | E)|(CAP_E | E)) ((CAP_R | R)|(CAP_R | R)) ((CAP_M | M)|(CAP_M | M));
 typedsearchterm : ( ( match ws COLON ws )? matchsearchtermset ) | ( wild ws COLON ws wildsearchtermset );
 typedsearchtermset : LEFT_PAREN ws typedsearchterm (mws typedsearchterm)* ws RIGHT_PAREN;
@@ -85,7 +88,8 @@ dialect : ((CAP_D | D)|(CAP_D | D)) ((CAP_I | I)|(CAP_I | I)) ((CAP_A | A)|(CAP_
 dialectalias : alpha ( dash | alpha | integervalue)*;
 dialectaliasset : LEFT_PAREN ws dialectalias (ws acceptabilityset)? (mws dialectalias (ws acceptabilityset)? )* ws RIGHT_PAREN;
 dialectidset : LEFT_PAREN ws eclconceptreference (ws acceptabilityset)? (mws eclconceptreference (ws acceptabilityset)? )* ws RIGHT_PAREN;
-acceptabilityset : eclconceptreferenceset | acceptabilitytokenset;
+acceptabilityset : acceptabilityconceptreferenceset | acceptabilitytokenset;
+acceptabilityconceptreferenceset : LEFT_PAREN ws eclconceptreference (mws eclconceptreference)* ws RIGHT_PAREN;
 acceptabilitytokenset : LEFT_PAREN ws acceptabilitytoken (mws acceptabilitytoken)* ws RIGHT_PAREN;
 acceptabilitytoken : acceptable | preferred;
 acceptable : ((CAP_A | A)|(CAP_A | A)) ((CAP_C | C)|(CAP_C | C)) ((CAP_C | C)|(CAP_C | C)) ((CAP_E | E)|(CAP_E | E)) ((CAP_P | P)|(CAP_P | P)) ((CAP_T | T)|(CAP_T | T));
@@ -94,9 +98,9 @@ conceptfilterconstraint : (LEFT_CURLY_BRACE LEFT_CURLY_BRACE) ws ((CAP_C | C) | 
 conceptfilter : definitionstatusfilter | modulefilter | effectivetimefilter | activefilter;
 definitionstatusfilter : definitionstatusidfilter | definitionstatustokenfilter;
 definitionstatusidfilter : definitionstatusidkeyword ws booleancomparisonoperator ws (subexpressionconstraint | eclconceptreferenceset);
-definitionstatusidkeyword : ((CAP_D | D)|(CAP_D | D)) ((CAP_E | E)|(CAP_E | E)) ((CAP_F | F)|(CAP_F | F)) ((CAP_I | I)|(CAP_I | I))  ((CAP_N | N)|(CAP_N | N))  ((CAP_I | I)|(CAP_I | I))  ((CAP_T | T)|(CAP_T | T))  ((CAP_I | I)|(CAP_I | I))  ((CAP_O | O)|(CAP_O | O))  ((CAP_N | N)|(CAP_N | N))  ((CAP_S | S)|(CAP_S | S))  ((CAP_T | T)|(CAP_T | T))  ((CAP_A | A)|(CAP_A | A))  ((CAP_T | T)|(CAP_T | T))  ((CAP_U | U)|(CAP_U | U))  ((CAP_S | S)|(CAP_S | S))  ((CAP_I | I)|(CAP_I | I))  ((CAP_D | D)|(CAP_D | D));
+definitionstatusidkeyword : ((CAP_D | D)|(CAP_D | D)) ((CAP_E | E)|(CAP_E | E)) ((CAP_F | F)|(CAP_F | F)) ((CAP_I | I)|(CAP_I | I)) ((CAP_N | N)|(CAP_N | N)) ((CAP_I | I)|(CAP_I | I)) ((CAP_T | T)|(CAP_T | T)) ((CAP_I | I)|(CAP_I | I)) ((CAP_O | O)|(CAP_O | O)) ((CAP_N | N)|(CAP_N | N)) ((CAP_S | S)|(CAP_S | S)) ((CAP_T | T)|(CAP_T | T)) ((CAP_A | A)|(CAP_A | A)) ((CAP_T | T)|(CAP_T | T)) ((CAP_U | U)|(CAP_U | U)) ((CAP_S | S)|(CAP_S | S)) ((CAP_I | I)|(CAP_I | I)) ((CAP_D | D)|(CAP_D | D));
 definitionstatustokenfilter : definitionstatuskeyword ws booleancomparisonoperator ws (definitionstatustoken | definitionstatustokenset);
-definitionstatuskeyword : ((CAP_D | D)|(CAP_D | D)) ((CAP_E | E)|(CAP_E | E)) ((CAP_F | F)|(CAP_F | F)) ((CAP_I | I)|(CAP_I | I))  ((CAP_N | N)|(CAP_N | N))  ((CAP_I | I)|(CAP_I | I))  ((CAP_T | T)|(CAP_T | T))  ((CAP_I | I)|(CAP_I | I))  ((CAP_O | O)|(CAP_O | O))  ((CAP_N | N)|(CAP_N | N))  ((CAP_S | S)|(CAP_S | S))  ((CAP_T | T)|(CAP_T | T))  ((CAP_A | A)|(CAP_A | A))  ((CAP_T | T)|(CAP_T | T))  ((CAP_U | U)|(CAP_U | U))  ((CAP_S | S)|(CAP_S | S));
+definitionstatuskeyword : ((CAP_D | D)|(CAP_D | D)) ((CAP_E | E)|(CAP_E | E)) ((CAP_F | F)|(CAP_F | F)) ((CAP_I | I)|(CAP_I | I)) ((CAP_N | N)|(CAP_N | N)) ((CAP_I | I)|(CAP_I | I)) ((CAP_T | T)|(CAP_T | T)) ((CAP_I | I)|(CAP_I | I)) ((CAP_O | O)|(CAP_O | O)) ((CAP_N | N)|(CAP_N | N)) ((CAP_S | S)|(CAP_S | S)) ((CAP_T | T)|(CAP_T | T)) ((CAP_A | A)|(CAP_A | A)) ((CAP_T | T)|(CAP_T | T)) ((CAP_U | U)|(CAP_U | U)) ((CAP_S | S)|(CAP_S | S));
 definitionstatustoken : primitivetoken | definedtoken;
 definitionstatustokenset : LEFT_PAREN ws definitionstatustoken (mws definitionstatustoken)* ws RIGHT_PAREN;
 primitivetoken : ((CAP_P | P)|(CAP_P | P)) ((CAP_R | R)|(CAP_R | R)) ((CAP_I | I)|(CAP_I | I)) ((CAP_M | M)|(CAP_M | M)) ((CAP_I | I)|(CAP_I | I)) ((CAP_T | T)|(CAP_T | T)) ((CAP_I | I)|(CAP_I | I)) ((CAP_V | V)|(CAP_V | V)) ((CAP_E | E)|(CAP_E | E));
@@ -108,16 +112,26 @@ effectivetimekeyword : ((CAP_E | E)|(CAP_E | E)) ((CAP_F | F)|(CAP_F | F)) ((CAP
 timevalue : qm ( year month day )? qm;
 timevalueset : LEFT_PAREN ws timevalue (mws timevalue)* ws RIGHT_PAREN;
 year : digitnonzero digit digit digit;
-month :  (ZERO ONE) | (ZERO TWO) | (ZERO THREE) | (ZERO FOUR) | (ZERO FIVE) | (ZERO SIX) | (ZERO SEVEN) | (ZERO EIGHT) | (ZERO NINE) | (ONE ZERO) | (ONE ONE) | (ONE TWO);
+month : (ZERO ONE) | (ZERO TWO) | (ZERO THREE) | (ZERO FOUR) | (ZERO FIVE) | (ZERO SIX) | (ZERO SEVEN) | (ZERO EIGHT) | (ZERO NINE) | (ONE ZERO) | (ONE ONE) | (ONE TWO);
 day : (ZERO ONE) | (ZERO TWO) | (ZERO THREE) | (ZERO FOUR) | (ZERO FIVE) | (ZERO SIX) | (ZERO SEVEN) | (ZERO EIGHT) | (ZERO NINE) | (ONE ZERO) | (ONE ONE) | (ONE TWO) | (ONE THREE) | (ONE FOUR) | (ONE FIVE) | (ONE SIX) | (ONE SEVEN) | (ONE EIGHT) | (ONE NINE) | (TWO ZERO) | (TWO ONE) | (TWO TWO) | (TWO THREE) | (TWO FOUR) | (TWO FIVE) | (TWO SIX) | (TWO SEVEN) | (TWO EIGHT) | (TWO NINE) | (THREE ZERO) | (THREE ONE);
 activefilter : activekeyword ws booleancomparisonoperator ws activevalue;
 activekeyword : ((CAP_A | A)|(CAP_A | A)) ((CAP_C | C)|(CAP_C | C)) ((CAP_T | T)|(CAP_T | T)) ((CAP_I | I)|(CAP_I | I)) ((CAP_V | V)|(CAP_V | V)) ((CAP_E | E)|(CAP_E | E));
 activevalue : activetruevalue | activefalsevalue;
 activetruevalue : ONE | ((CAP_T | T) (CAP_R | R) (CAP_U | U) (CAP_E | E));
 activefalsevalue : ZERO | ((CAP_F | F) (CAP_A | A) (CAP_L | L) (CAP_S | S) (CAP_E | E));
+memberfilterconstraint : (LEFT_CURLY_BRACE LEFT_CURLY_BRACE) ws ((CAP_M | M) | (CAP_M | M)) ws memberfilter (ws COMMA ws memberfilter)* ws (RIGHT_CURLY_BRACE RIGHT_CURLY_BRACE);
+memberfilter : memberfieldfilter | modulefilter | effectivetimefilter | activefilter;
+memberfieldfilter : refsetfieldname ws ((expressioncomparisonoperator ws subexpressionconstraint) | (numericcomparisonoperator ws HASH numericvalue) | (stringcomparisonoperator ws (typedsearchterm | typedsearchtermset)) | (booleancomparisonoperator ws booleanvalue) | (ws timecomparisonoperator ws (timevalue | timevalueset)) );
+historysupplement : (LEFT_CURLY_BRACE LEFT_CURLY_BRACE) ws PLUS ws historykeyword ( historyprofilesuffix | (ws historysubset) )? ws (RIGHT_CURLY_BRACE RIGHT_CURLY_BRACE);
+historykeyword : ((CAP_H | H)|(CAP_H | H)) ((CAP_I | I)|(CAP_I | I)) ((CAP_S | S)|(CAP_S | S)) ((CAP_T | T)|(CAP_T | T)) ((CAP_O | O)|(CAP_O | O)) ((CAP_R | R)|(CAP_R | R)) ((CAP_Y | Y)|(CAP_Y | Y));
+historyprofilesuffix : historyminimumsuffix | historymoderatesuffix | historymaximumsuffix;
+historyminimumsuffix : (DASH|UNDERSCORE) ((CAP_M | M)|(CAP_M | M)) ((CAP_I | I)|(CAP_I | I)) ((CAP_N | N)|(CAP_N | N));
+historymoderatesuffix : (DASH|UNDERSCORE) ((CAP_M | M)|(CAP_M | M)) ((CAP_O | O)|(CAP_O | O)) ((CAP_D | D)|(CAP_D | D));
+historymaximumsuffix : (DASH|UNDERSCORE) ((CAP_M | M)|(CAP_M | M)) ((CAP_A | A)|(CAP_A | A)) ((CAP_X | X)|(CAP_X | X));
+historysubset : LEFT_PAREN ws expressionconstraint ws RIGHT_PAREN;
 numericvalue : (DASH|PLUS)? (decimalvalue | integervalue);
 stringvalue : (anynonescapedchar | escapedchar)+;
-integervalue :  (digitnonzero digit*) | zero;
+integervalue : (digitnonzero digit*) | zero;
 decimalvalue : integervalue PERIOD digit+;
 booleanvalue : true_1 | false_1;
 true_1 : ((CAP_T | T)|(CAP_T | T)) ((CAP_R | R)|(CAP_R | R)) ((CAP_U | U)|(CAP_U | U)) ((CAP_E | E)|(CAP_E | E));
@@ -136,7 +150,7 @@ cr : CR; // carriage return
 lf : LF; // line feed
 qm : QUOTE; // quotation mark
 bs : BACKSLASH; // back slash
-star : ASTERISK;  // asterisk
+star : ASTERISK; // asterisk
 digit : (ZERO | ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN | EIGHT | NINE);
 zero : ZERO;
 digitnonzero : (ONE | TWO | THREE | FOUR | FIVE | SIX | SEVEN | EIGHT | NINE);

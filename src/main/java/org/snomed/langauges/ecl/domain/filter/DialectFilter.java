@@ -4,17 +4,23 @@ import org.snomed.langauges.ecl.domain.expressionconstraint.SubExpressionConstra
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.StringJoiner;
 
-public class DialectFilter implements Filter {
+public class DialectFilter {
 
-	private final String booleanComparisonOperator;
-	private final List<DialectAcceptability> dialectAcceptabilities;
+	private boolean dialectAliasFilter;
+	private String booleanComparisonOperator;
+	private List<DialectAcceptability> dialectAcceptabilities;
 	private SubExpressionConstraint subExpressionConstraint;
 
-	public DialectFilter(String booleanComparisonOperator) {
+	@SuppressWarnings("unused")
+	protected DialectFilter() {
+		// For JSON
+	}
+
+	public DialectFilter(String booleanComparisonOperator, boolean dialectAliasFilter) {
 		this.booleanComparisonOperator = booleanComparisonOperator;
+		this.dialectAliasFilter = dialectAliasFilter;
 		this.dialectAcceptabilities = new ArrayList<>();
 	}
 
@@ -22,7 +28,14 @@ public class DialectFilter implements Filter {
 		dialectAcceptabilities.add(dialectAcceptability);
 	}
 
-	@Override
+	public boolean isDialectAliasFilter() {
+		return dialectAliasFilter;
+	}
+
+	public void setDialectAliasFilter(boolean dialectAliasFilter) {
+		this.dialectAliasFilter = dialectAliasFilter;
+	}
+
 	public String getBooleanComparisonOperator() {
 		return this.booleanComparisonOperator;
 	}
@@ -37,19 +50,6 @@ public class DialectFilter implements Filter {
 
 	public void setSubExpressionConstraint(SubExpressionConstraint subExpressionConstraint) {
 		this.subExpressionConstraint = subExpressionConstraint;
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
-		DialectFilter that = (DialectFilter) o;
-		return Objects.equals(booleanComparisonOperator, that.booleanComparisonOperator)&& Objects.equals(dialectAcceptabilities, that.dialectAcceptabilities);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(booleanComparisonOperator, dialectAcceptabilities);
 	}
 
 	@Override

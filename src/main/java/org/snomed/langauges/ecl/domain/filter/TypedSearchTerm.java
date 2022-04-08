@@ -5,7 +5,9 @@ public class TypedSearchTerm {
 	private SearchType type;
 	private String term;
 
-	private TypedSearchTerm() {
+	@SuppressWarnings("unused")
+	protected TypedSearchTerm() {
+		// For JSON
 	}
 
 	public TypedSearchTerm(SearchType type, String term) {
@@ -20,4 +22,5 @@ public class TypedSearchTerm {
 	public String getTerm() {
 		return term;
 	}
+
 }
