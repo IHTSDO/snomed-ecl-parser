@@ -46,6 +46,9 @@ public class Dialect {
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", Dialect.class.getSimpleName() + "[", "]").add("alias='" + alias + "'").add("dialectId='" + dialectId + "'").toString();
+		return "Dialect{" +
+				"alias='" + alias + '\'' +
+				", dialectId='" + dialectId + '\'' +
+				'}';
 	}
 }

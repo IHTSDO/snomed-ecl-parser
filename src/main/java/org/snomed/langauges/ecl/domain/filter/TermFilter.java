@@ -30,4 +30,11 @@ public class TermFilter {
 		return typedSearchTermSet;
 	}
 
+	@Override
+	public String toString() {
+		return "TermFilter{" +
+				"booleanComparisonOperator='" + booleanComparisonOperator + '\'' +
+				", typedSearchTermSet=" + typedSearchTermSet +
+				'}';
+	}
 }

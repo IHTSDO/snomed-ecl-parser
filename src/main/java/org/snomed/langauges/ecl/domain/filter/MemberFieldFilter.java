@@ -11,7 +11,7 @@ public class MemberFieldFilter {
 	private String expressionComparisonOperator;
 	private SubExpressionConstraint subExpressionConstraint;
 
-	private String numericComparisonOperator;
+	private NumericComparisonOperator numericComparisonOperator;
 	private String numericValue;
 
 	private String stringComparisonOperator;
@@ -20,7 +20,7 @@ public class MemberFieldFilter {
 	private String booleanComparisonOperator;
 	private boolean booleanValue;
 
-	private TimeComparisonOperator timeComparisonOperator;
+	private NumericComparisonOperator timeComparisonOperator;
 	private List<Integer> timeValues;
 
 	@SuppressWarnings("unused")
@@ -52,11 +52,11 @@ public class MemberFieldFilter {
 		return subExpressionConstraint;
 	}
 
-	public void setNumericComparisonOperator(String numericComparisonOperator) {
+	public void setNumericComparisonOperator(NumericComparisonOperator numericComparisonOperator) {
 		this.numericComparisonOperator = numericComparisonOperator;
 	}
 
-	public String getNumericComparisonOperator() {
+	public NumericComparisonOperator getNumericComparisonOperator() {
 		return numericComparisonOperator;
 	}
 
@@ -100,11 +100,11 @@ public class MemberFieldFilter {
 		return booleanValue;
 	}
 
-	public void setTimeComparisonOperator(TimeComparisonOperator timeComparisonOperator) {
+	public void setTimeComparisonOperator(NumericComparisonOperator timeComparisonOperator) {
 		this.timeComparisonOperator = timeComparisonOperator;
 	}
 
-	public TimeComparisonOperator getTimeComparisonOperator() {
+	public NumericComparisonOperator getTimeComparisonOperator() {
 		return timeComparisonOperator;
 	}
 
@@ -114,5 +114,22 @@ public class MemberFieldFilter {
 
 	public List<Integer> getTimeValues() {
 		return timeValues;
+	}
+
+	@Override
+	public String toString() {
+		return "MemberFieldFilter{" +
+				"fieldName='" + fieldName + '\'' +
+				", expressionComparisonOperator='" + expressionComparisonOperator + '\'' +
+				", subExpressionConstraint=" + subExpressionConstraint +
+				", numericComparisonOperator=" + numericComparisonOperator +
+				", numericValue='" + numericValue + '\'' +
+				", stringComparisonOperator='" + stringComparisonOperator + '\'' +
+				", searchTerms=" + searchTerms +
+				", booleanComparisonOperator='" + booleanComparisonOperator + '\'' +
+				", booleanValue=" + booleanValue +
+				", timeComparisonOperator=" + timeComparisonOperator +
+				", timeValues=" + timeValues +
+				'}';
 	}
 }

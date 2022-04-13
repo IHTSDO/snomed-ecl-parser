@@ -238,7 +238,7 @@ public class ECLQueryBuilder {
 
 		private EffectiveTimeFilter buildFilter(ECLParser.EffectivetimefilterContext effectivetimefilter) {
 			String operatorText = effectivetimefilter.timecomparisonoperator().getText();
-			TimeComparisonOperator operator = TimeComparisonOperator.fromText(operatorText);
+			NumericComparisonOperator operator = NumericComparisonOperator.fromText(operatorText);
 			if (operator == null) {
 				throw new IllegalArgumentException(String.format("Time comparison operator '%s' not recognised.", operatorText));
 			}
@@ -447,7 +447,7 @@ public class ECLQueryBuilder {
 				SubExpressionConstraint subExpressionConstraint = build(memberfieldfilter.subexpressionconstraint());
 				fieldFilter.setSubExpressionConstraint(subExpressionConstraint);
 			} else if (memberfieldfilter.numericcomparisonoperator() != null) {
-				fieldFilter.setNumericComparisonOperator(memberfieldfilter.numericcomparisonoperator().getText());
+				fieldFilter.setNumericComparisonOperator(NumericComparisonOperator.fromText(memberfieldfilter.numericcomparisonoperator().getText()));
 				String numericValue = memberfieldfilter.numericvalue().getText().replace("+", "");
 				fieldFilter.setNumericValue(numericValue);
 			} else if (memberfieldfilter.stringcomparisonoperator() != null) {
@@ -458,7 +458,7 @@ public class ECLQueryBuilder {
 				fieldFilter.setBooleanComparisonOperator(memberfieldfilter.booleancomparisonoperator().getText());
 				fieldFilter.setBooleanValue(memberfieldfilter.booleanvalue().true_1() != null);
 			} else {
-				TimeComparisonOperator timeComparisonOperator = TimeComparisonOperator.fromText(memberfieldfilter.timecomparisonoperator().getText());
+				NumericComparisonOperator timeComparisonOperator = NumericComparisonOperator.fromText(memberfieldfilter.timecomparisonoperator().getText());
 				fieldFilter.setTimeComparisonOperator(timeComparisonOperator);
 				List<Integer> timeValues = build(memberfieldfilter.timevalue(), memberfieldfilter.timevalueset());
 				fieldFilter.setTimeValues(timeValues);

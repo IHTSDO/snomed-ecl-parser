@@ -54,8 +54,11 @@ public class DialectFilter {
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", DialectFilter.class.getSimpleName() + "[", "]")
-				.add("booleanComparisonOperator='" + booleanComparisonOperator + "'")
-				.add("dialectAcceptabilities=" + dialectAcceptabilities).toString();
+		return "DialectFilter{" +
+				"dialectAliasFilter=" + dialectAliasFilter +
+				", booleanComparisonOperator='" + booleanComparisonOperator + '\'' +
+				", dialectAcceptabilities=" + dialectAcceptabilities +
+				", subExpressionConstraint=" + subExpressionConstraint +
+				'}';
 	}
 }

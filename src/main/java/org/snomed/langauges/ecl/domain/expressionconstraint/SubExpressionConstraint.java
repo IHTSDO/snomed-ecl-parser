@@ -128,13 +128,16 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 	public String toString() {
 		return "SubExpressionConstraint{" +
 				"operator=" + operator +
-				", conceptId=" + conceptId +
-				", term=" + term +
+				", conceptId='" + conceptId + '\'' +
+				", term='" + term + '\'' +
 				", wildcard=" + wildcard +
 				", nestedExpressionConstraint=" + nestedExpressionConstraint +
-				", descriptionFilterConstraints=" + descriptionFilterConstraints +
 				", conceptFilterConstraints=" + conceptFilterConstraints +
+				", descriptionFilterConstraints=" + descriptionFilterConstraints +
 				", memberFilterConstraints=" + memberFilterConstraints +
+				", historySupplement=" + historySupplement +
+				", memberFieldsToReturn=" + memberFieldsToReturn +
+				", returnAllMemberFields=" + returnAllMemberFields +
 				'}';
 	}
 }

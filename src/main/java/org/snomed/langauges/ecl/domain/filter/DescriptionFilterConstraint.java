@@ -89,4 +89,17 @@ public class DescriptionFilterConstraint {
 	public List<ActiveFilter> getActiveFilters() {
 		return activeFilters;
 	}
+
+	@Override
+	public String toString() {
+		return "DescriptionFilterConstraint{" +
+				"termFilters=" + termFilters +
+				", descriptionTypeFilters=" + descriptionTypeFilters +
+				", languageFilters=" + languageFilters +
+				", dialectFilters=" + dialectFilters +
+				", moduleFilters=" + moduleFilters +
+				", effectiveTimeFilters=" + effectiveTimeFilters +
+				", activeFilters=" + activeFilters +
+				'}';
+	}
 }

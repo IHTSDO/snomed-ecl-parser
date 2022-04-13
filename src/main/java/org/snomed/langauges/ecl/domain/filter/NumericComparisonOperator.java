@@ -1,6 +1,6 @@
 package org.snomed.langauges.ecl.domain.filter;
 
-public enum TimeComparisonOperator {
+public enum NumericComparisonOperator {
 
 	EQUAL("="),
 	NOT_EQUAL("!="),
@@ -11,12 +11,12 @@ public enum TimeComparisonOperator {
 
 	private final String text;
 
-	TimeComparisonOperator(String text) {
+	NumericComparisonOperator(String text) {
 		this.text = text;
 	}
 
-	public static TimeComparisonOperator fromText(String textString) {
-		for (TimeComparisonOperator value : values()) {
+	public static NumericComparisonOperator fromText(String textString) {
+		for (NumericComparisonOperator value : values()) {
 			if (value.text.equals(textString)) {
 				return value;
 			}

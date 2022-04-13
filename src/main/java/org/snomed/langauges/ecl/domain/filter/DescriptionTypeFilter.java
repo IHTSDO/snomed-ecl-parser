@@ -46,6 +46,10 @@ public class DescriptionTypeFilter {
 
 	@Override
 	public String toString() {
-		return new StringJoiner(", ", DescriptionTypeFilter.class.getSimpleName() + "[", "]").add("types=" + types).add("booleanComparisonOperator='" + booleanComparisonOperator + "'").toString();
+		return "DescriptionTypeFilter{" +
+				"booleanComparisonOperator='" + booleanComparisonOperator + '\'' +
+				", types=" + types +
+				", subExpressionConstraint=" + subExpressionConstraint +
+				'}';
 	}
 }

@@ -50,4 +50,13 @@ public class FieldFilter {
 		return subExpressionConstraint;
 	}
 
+	@Override
+	public String toString() {
+		return "FieldFilter{" +
+				"field='" + field + '\'' +
+				", equals=" + equals +
+				", conceptReferences=" + conceptReferences +
+				", subExpressionConstraint=" + subExpressionConstraint +
+				'}';
+	}
 }

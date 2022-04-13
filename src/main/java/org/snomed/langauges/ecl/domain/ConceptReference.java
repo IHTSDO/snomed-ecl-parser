@@ -32,4 +32,11 @@ public class ConceptReference {
 	public void setTerm(String term) {
 		this.term = term;
 	}
+
+	@Override
+	public String toString() {
+		return "ConceptReference{" +
+				"conceptId='" + conceptId + '\'' +
+				'}';
+	}
 }

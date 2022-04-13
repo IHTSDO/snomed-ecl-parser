@@ -138,16 +138,19 @@ public class EclAttribute implements Refinement {
 	@Override
 	public String toString() {
 		return "EclAttribute{" +
-				"attributeName=" + attributeName +
-				", expressionComparisonOperator='" + expressionComparisonOperator + '\'' +
-				", value=" + value +
-				", reverse=" + reverse +
+				"parentGroup=" + parentGroup +
 				", cardinalityMin=" + cardinalityMin +
 				", cardinalityMax=" + cardinalityMax +
-				", withinGroup=" + (parentGroup != null) +
-				", groupCardinalityMin=" + (parentGroup != null ? parentGroup.getCardinalityMin() : null) +
-				", groupCardinalityMax=" + (parentGroup != null ? parentGroup.getCardinalityMax() : null) +
-				", withinGroup=" + (parentGroup != null) +
+				", reverse=" + reverse +
+				", attributeName=" + attributeName +
+				", expressionComparisonOperator='" + expressionComparisonOperator + '\'' +
+				", value=" + value +
+				", numericComparisonOperator='" + numericComparisonOperator + '\'' +
+				", numericValue='" + numericValue + '\'' +
+				", stringComparisonOperator='" + stringComparisonOperator + '\'' +
+				", stringValues=" + stringValues +
+				", booleanComparisonOperator='" + booleanComparisonOperator + '\'' +
+				", booleanValue=" + booleanValue +
 				'}';
 	}
 }

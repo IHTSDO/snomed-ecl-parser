@@ -53,4 +53,14 @@ public class ConceptFilterConstraint {
 	public List<ActiveFilter> getActiveFilters() {
 		return activeFilters;
 	}
+
+	@Override
+	public String toString() {
+		return "ConceptFilterConstraint{" +
+				"activeFilters=" + activeFilters +
+				", definitionStatusFilters=" + definitionStatusFilters +
+				", effectiveTimeFilters=" + effectiveTimeFilters +
+				", moduleFilters=" + moduleFilters +
+				'}';
+	}
 }

@@ -31,4 +31,11 @@ public class LanguageFilter {
 		return this.booleanComparisonOperator;
 	}
 
+	@Override
+	public String toString() {
+		return "LanguageFilter{" +
+				"booleanComparisonOperator='" + booleanComparisonOperator + '\'' +
+				", languageCodes=" + languageCodes +
+				'}';
+	}
 }

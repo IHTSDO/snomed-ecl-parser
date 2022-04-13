@@ -23,4 +23,11 @@ public class TypedSearchTerm {
 		return term;
 	}
 
+	@Override
+	public String toString() {
+		return "TypedSearchTerm{" +
+				"type=" + type +
+				", term='" + term + '\'' +
+				'}';
+	}
 }

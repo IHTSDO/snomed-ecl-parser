@@ -24,4 +24,12 @@ public class HistorySupplement {
 	public ExpressionConstraint getHistorySubset() {
 		return historySubset;
 	}
+
+	@Override
+	public String toString() {
+		return "HistorySupplement{" +
+				"historyProfile=" + historyProfile +
+				", historySubset=" + historySubset +
+				'}';
+	}
 }

@@ -4,7 +4,7 @@ import java.util.Set;
 
 public class EffectiveTimeFilter {
 
-	private TimeComparisonOperator operator;
+	private NumericComparisonOperator operator;
 	private Set<Integer> effectiveTime;
 
 	@SuppressWarnings("unused")
@@ -12,12 +12,12 @@ public class EffectiveTimeFilter {
 		// For JSON
 	}
 
-	public EffectiveTimeFilter(TimeComparisonOperator operator, Set<Integer> effectiveTime) {
+	public EffectiveTimeFilter(NumericComparisonOperator operator, Set<Integer> effectiveTime) {
 		this.operator = operator;
 		this.effectiveTime = effectiveTime;
 	}
 
-	public TimeComparisonOperator getOperator() {
+	public NumericComparisonOperator getOperator() {
 		return operator;
 	}
 
@@ -25,4 +25,11 @@ public class EffectiveTimeFilter {
 		return effectiveTime;
 	}
 
+	@Override
+	public String toString() {
+		return "EffectiveTimeFilter{" +
+				"operator=" + operator +
+				", effectiveTime=" + effectiveTime +
+				'}';
+	}
 }

@@ -53,4 +53,14 @@ public class MemberFilterConstraint {
 	public List<ActiveFilter> getActiveFilters() {
 		return activeFilters;
 	}
+
+	@Override
+	public String toString() {
+		return "MemberFilterConstraint{" +
+				"memberFieldFilters=" + memberFieldFilters +
+				", moduleFilters=" + moduleFilters +
+				", effectiveTimeFilters=" + effectiveTimeFilters +
+				", activeFilters=" + activeFilters +
+				'}';
+	}
 }

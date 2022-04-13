@@ -16,4 +16,11 @@ public class ActiveFilter {
 	public boolean isActive() {
 		return active;
 	}
+
+	@Override
+	public String toString() {
+		return "ActiveFilter{" +
+				"active=" + active +
+				'}';
+	}
 }

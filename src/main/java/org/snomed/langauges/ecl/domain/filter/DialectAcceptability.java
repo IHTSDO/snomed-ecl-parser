@@ -61,4 +61,14 @@ public class DialectAcceptability {
 		this.acceptabilityTokenSet = acceptabilityTokenSet;
 	}
 
+	@Override
+	public String toString() {
+		return "DialectAcceptability{" +
+				"dialectId=" + dialectId +
+				", subExpressionConstraint=" + subExpressionConstraint +
+				", dialectAlias='" + dialectAlias + '\'' +
+				", acceptabilityIdSet=" + acceptabilityIdSet +
+				", acceptabilityTokenSet=" + acceptabilityTokenSet +
+				'}';
+	}
 }

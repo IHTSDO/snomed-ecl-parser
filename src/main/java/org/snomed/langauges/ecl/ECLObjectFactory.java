@@ -60,7 +60,7 @@ public class ECLObjectFactory {
 		return new FieldFilter(fieldName, equals);
 	}
 
-	public EffectiveTimeFilter getEffectiveTimeFilter(TimeComparisonOperator operator, Set<Integer> effectiveTimes) {
+	public EffectiveTimeFilter getEffectiveTimeFilter(NumericComparisonOperator operator, Set<Integer> effectiveTimes) {
 		return new EffectiveTimeFilter(operator, effectiveTimes);
 	}
 
