@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.snomed.langauges.ecl.domain.ConceptReference;
+import org.snomed.langauges.ecl.domain.Pair;
 import org.snomed.langauges.ecl.domain.expressionconstraint.*;
 import org.snomed.langauges.ecl.domain.filter.*;
 import org.snomed.langauges.ecl.domain.refinement.*;
@@ -88,8 +89,8 @@ public class ECLQueryBuilder {
 			} else if (ctx.disjunctionexpressionconstraint() != null) {
 				compoundExpressionConstraint.setDisjunctionExpressionConstraints(build(ctx.disjunctionexpressionconstraint().subexpressionconstraint()));
 			} else if (ctx.exclusionexpressionconstraint() != null) {
-				compoundExpressionConstraint.setConjunctionExpressionConstraints(Collections.singletonList(build(ctx.exclusionexpressionconstraint().subexpressionconstraint(0))));
-				compoundExpressionConstraint.setExclusionExpressionConstraint(build(ctx.exclusionexpressionconstraint().subexpressionconstraint(1)));
+				compoundExpressionConstraint.setExclusionExpressionConstraints(new Pair<>(
+						build(ctx.exclusionexpressionconstraint().subexpressionconstraint(0)), build(ctx.exclusionexpressionconstraint().subexpressionconstraint(1))));
 			}
 			return compoundExpressionConstraint;
 		}

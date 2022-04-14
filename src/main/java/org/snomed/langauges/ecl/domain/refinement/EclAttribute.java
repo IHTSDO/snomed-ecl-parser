@@ -138,7 +138,6 @@ public class EclAttribute implements Refinement {
 	@Override
 	public String toString() {
 		return "EclAttribute{" +
-				"parentGroup=" + parentGroup +
 				", cardinalityMin=" + cardinalityMin +
 				", cardinalityMax=" + cardinalityMax +
 				", reverse=" + reverse +

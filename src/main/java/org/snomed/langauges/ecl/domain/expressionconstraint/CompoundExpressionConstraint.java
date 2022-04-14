@@ -1,12 +1,14 @@
 package org.snomed.langauges.ecl.domain.expressionconstraint;
 
+import org.snomed.langauges.ecl.domain.Pair;
+
 import java.util.List;
 
 public class CompoundExpressionConstraint implements ExpressionConstraint {
 
 	protected List<SubExpressionConstraint> conjunctionExpressionConstraints;
 	protected List<SubExpressionConstraint> disjunctionExpressionConstraints;
-	protected SubExpressionConstraint exclusionExpressionConstraint;
+	protected Pair<SubExpressionConstraint> exclusionExpressionConstraints;
 
 	public void setConjunctionExpressionConstraints(List<SubExpressionConstraint> conjunctionExpressionConstraints) {
 		this.conjunctionExpressionConstraints = conjunctionExpressionConstraints;
@@ -16,8 +18,8 @@ public class CompoundExpressionConstraint implements ExpressionConstraint {
 		this.disjunctionExpressionConstraints = disjunctionExpressionConstraints;
 	}
 
-	public void setExclusionExpressionConstraint(SubExpressionConstraint exclusionExpressionConstraint) {
-		this.exclusionExpressionConstraint = exclusionExpressionConstraint;
+	public void setExclusionExpressionConstraints(Pair<SubExpressionConstraint> exclusionExpressionConstraints) {
+		this.exclusionExpressionConstraints = exclusionExpressionConstraints;
 	}
 
 	public List<SubExpressionConstraint> getConjunctionExpressionConstraints() {
@@ -28,8 +30,8 @@ public class CompoundExpressionConstraint implements ExpressionConstraint {
 		return disjunctionExpressionConstraints;
 	}
 
-	public SubExpressionConstraint getExclusionExpressionConstraint() {
-		return exclusionExpressionConstraint;
+	public Pair<SubExpressionConstraint> getExclusionExpressionConstraints() {
+		return exclusionExpressionConstraints;
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class CompoundExpressionConstraint implements ExpressionConstraint {
 		return "CompoundExpressionConstraint{" +
 				"conjunctionExpressionConstraints=" + conjunctionExpressionConstraints +
 				", disjunctionExpressionConstraints=" + disjunctionExpressionConstraints +
-				", exclusionExpressionConstraint=" + exclusionExpressionConstraint +
+				", exclusionExpressionConstraints=" + exclusionExpressionConstraints +
 				'}';
 	}
 }
