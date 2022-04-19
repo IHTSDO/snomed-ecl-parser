@@ -42,7 +42,7 @@ public class DescriptionFilterConstraint {
 	}
 
 	public void addFilter(FieldFilter moduleFilter) {
-		if (moduleFilter == null) {
+		if (moduleFilters == null) {
 			moduleFilters = new ArrayList<>();
 		}
 		moduleFilters.add(moduleFilter);
