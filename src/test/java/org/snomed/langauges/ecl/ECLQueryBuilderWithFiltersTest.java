@@ -348,20 +348,19 @@ public class ECLQueryBuilderWithFiltersTest {
 		assertEquals(Acceptability.PREFERRED, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
 
 		// First dialect has no acceptability, second does
-		// TODO: Is this valid? Ask the languages group.
-//		ecl = "< 64572001 |Disease|  {{ dialect = ( en-us en-gb (prefer) ) }}";
-//		filterConstraints = getFilterConstraints(ecl);
-//		dialectFilters = filterConstraints.get(0).getDialectFilters();
-//		assertEquals(1, dialectFilters.size());
-//		dialectAcceptabilities = dialectFilters.get(0).getDialectAcceptabilities();
-//		assertEquals(2, dialectAcceptabilities.size());
-//		dialectAcceptability = dialectAcceptabilities.get(0);
-//		assertEquals("en-us", dialectAcceptability.getDialectAlias());
-//		assertNull(dialectAcceptability.getAcceptabilityTokenSet());
-//		assertNull(dialectAcceptability.getAcceptabilityIdSet());
-//		dialectAcceptability = dialectAcceptabilities.get(1);
-//		assertEquals("en-gb", dialectAcceptability.getDialectAlias());
-//		assertEquals(Acceptability.PREFERRED, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
+		ecl = "< 64572001 |Disease|  {{ dialect = ( en-us en-gb (prefer) ) }}";
+		filterConstraints = getFilterConstraints(ecl);
+		dialectFilters = filterConstraints.get(0).getDialectFilters();
+		assertEquals(1, dialectFilters.size());
+		dialectAcceptabilities = dialectFilters.get(0).getDialectAcceptabilities();
+		assertEquals(2, dialectAcceptabilities.size());
+		dialectAcceptability = dialectAcceptabilities.get(0);
+		assertEquals("en-us", dialectAcceptability.getDialectAlias());
+		assertNull(dialectAcceptability.getAcceptabilityTokenSet());
+		assertNull(dialectAcceptability.getAcceptabilityIdSet());
+		dialectAcceptability = dialectAcceptabilities.get(1);
+		assertEquals("en-gb", dialectAcceptability.getDialectAlias());
+		assertEquals(Acceptability.PREFERRED, dialectAcceptability.getAcceptabilityTokenSet().iterator().next());
 	}
 
 	@Test
