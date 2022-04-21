@@ -27,11 +27,31 @@ public class ECLQueryBuilder {
 	}
 
 	public ExpressionConstraint createQuery(String ecl) throws ECLException {
+		ecl = ecl.replace(",", " ,");
 		ANTLRInputStream inputStream = new ANTLRInputStream(ecl);
 		final ECLLexer lexer = new ECLLexer(inputStream);
 		final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 		final ECLParser parser = new ECLParser(tokenStream);
-		parser.setErrorHandler(new BailErrorStrategy());
+		parser.removeErrorListeners();
+		parser.setErrorHandler(new DefaultErrorStrategy() {
+			@Override
+			protected void reportNoViableAlternative(Parser recognizer, NoViableAltException e) {
+				Token startToken = e.getStartToken();
+				if (startToken.getText().equals("<EOF>")) {
+					throw new ECLException("ECL is incomplete.");
+				} else {
+					throw new ECLException(String.format("No viable alternative at line %s, character %s.",
+							startToken.getLine(), startToken.getCharPositionInLine()));
+				}
+			}
+		});
+		parser.addErrorListener(new BaseErrorListener() {
+			@Override
+			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
+				throw new ECLException(String.format("Syntax error at line %s, character %s: %s", line, charPositionInLine,
+						msg.replace("extraneous input", "unexpected character")));
+			}
+		});
 
 		ParserRuleContext tree;
 		try {
@@ -62,6 +82,12 @@ public class ECLQueryBuilder {
 				rootExpressionConstraint = expressionConstraint;
 			}
 		}
+
+//		@Override
+//		public void visitErrorNode(ErrorNode errorNode) {
+//			Token symbol = errorNode.getSymbol();
+//			throw new ECLException(String.format("Unexpected character '%s' at position %s.", symbol.getText(), symbol.getStartIndex()));
+//		}
 
 		private ExpressionConstraint build(ECLParser.ExpressionconstraintContext expressionConstraint) {
 			if (expressionConstraint.refinedexpressionconstraint() != null) {
@@ -136,7 +162,7 @@ public class ECLQueryBuilder {
 				}
 				if (eclFocusConcept.eclconceptreference() != null) {
 					if (eclFocusConcept.eclconceptreference().term() != null) {
-						subExpressionConstraint.setTerm(eclFocusConcept.eclconceptreference().term().getText());
+						subExpressionConstraint.setTerm(eclFocusConcept.eclconceptreference().term().getText().replace(" ,", ","));
 					}
 					subExpressionConstraint.setConceptId(eclFocusConcept.eclconceptreference().conceptid().getText());
 				}
@@ -178,7 +204,7 @@ public class ECLQueryBuilder {
 		private ConceptReference build(ECLParser.EclconceptreferenceContext eclconceptreference) {
 			ConceptReference conceptReference = new ConceptReference(eclconceptreference.conceptid().getText());
 			if (eclconceptreference.term() != null) {
-				conceptReference.setTerm(eclconceptreference.term().getText());
+				conceptReference.setTerm(eclconceptreference.term().getText().replace(" ,", ","));
 			}
 			return conceptReference;
 		}

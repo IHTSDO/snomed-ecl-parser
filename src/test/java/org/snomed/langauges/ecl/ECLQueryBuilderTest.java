@@ -24,9 +24,49 @@ public class ECLQueryBuilderTest {
 	/*
 	  This test demonstrates using the query builder to test the validity of ECL strings.
 	 */
-	@Test(expected = ECLException.class)
+	@Test
 	public void parseInvalidSyntax() {
-		eclQueryBuilder.createQuery("404684003 |Clinical finding| : 404684003 |Clinical finding|");
+		try {
+			eclQueryBuilder.createQuery("404684003 |Clinical finding| : 404684003 |Clinical finding|");
+			fail("Expected exception");
+		} catch (ECLException e) {
+			assertEquals("ECL is incomplete.", e.getMessage());
+		}
+	}
+
+	@Test
+	public void parseInvalidSyntaxDot() {
+		try {
+			eclQueryBuilder.createQuery("<373873005 |Pharmaceutical / biologic product (product)| . 127489000 |Has active ingredient| = < 105590001 |Substance|");
+			fail("Expected exception");
+		} catch (ECLException e) {
+			assertEquals("Syntax error at line 1, character 93: unexpected character '=' expecting {<EOF>, '\\u0009', '\\u000A', '\\u000D', ' ', '/'}", e.getMessage());
+		}
+	}
+
+	@Test
+	public void parseInvalidSyntaxAndWithoutSpace() {
+		try {
+			eclQueryBuilder.createQuery("<<404684003:363698007=<<123037004and116676008=<<415582006");
+			fail("Expected exception");
+		} catch (ECLException e) {
+			assertEquals("Syntax error at line 1, character 33: mismatched input 'a' expecting {<EOF>, '\\u0009', '\\u000A', '\\u000D', ' ', '/', '{', '|'}", e.getMessage());
+		}
+	}
+
+	@Test
+	public void parseCommaWithoutSpace() {
+		eclQueryBuilder.createQuery("<<404684003:363698007=<<123037004,116676008=<<415582006");
+	}
+
+	@Test
+	public void parseInvalidSyntaxMissingComma() {
+		try {
+			eclQueryBuilder.createQuery("<<404684003:[1..2]363698007= <<123037004 [0..0]116676008= <<415582006");
+			fail("Expected exception");
+		} catch (ECLException e) {
+			assertEquals("Syntax error at line 1, character 41: unexpected character '[' expecting {<EOF>, '\\u0009', '\\u000A', '\\u000D', ' ', ',', '/', 'A', 'O', 'a', 'o'}", e.getMessage());
+		}
 	}
 
 	/*
