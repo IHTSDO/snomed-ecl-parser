@@ -120,7 +120,7 @@ activevalue : activetruevalue | activefalsevalue;
 activetruevalue : ONE | ((CAP_T | T) (CAP_R | R) (CAP_U | U) (CAP_E | E));
 activefalsevalue : ZERO | ((CAP_F | F) (CAP_A | A) (CAP_L | L) (CAP_S | S) (CAP_E | E));
 memberfilterconstraint : (LEFT_CURLY_BRACE LEFT_CURLY_BRACE) ws ((CAP_M | M) | (CAP_M | M)) ws memberfilter (ws COMMA ws memberfilter)* ws (RIGHT_CURLY_BRACE RIGHT_CURLY_BRACE);
-memberfilter : memberfieldfilter | modulefilter | effectivetimefilter | activefilter;
+memberfilter : modulefilter | effectivetimefilter | activefilter | memberfieldfilter;
 memberfieldfilter : refsetfieldname ws ((expressioncomparisonoperator ws subexpressionconstraint) | (numericcomparisonoperator ws HASH numericvalue) | (stringcomparisonoperator ws (typedsearchterm | typedsearchtermset)) | (booleancomparisonoperator ws booleanvalue) | (ws timecomparisonoperator ws (timevalue | timevalueset)) );
 historysupplement : (LEFT_CURLY_BRACE LEFT_CURLY_BRACE) ws PLUS ws historykeyword ( historyprofilesuffix | (ws historysubset) )? ws (RIGHT_CURLY_BRACE RIGHT_CURLY_BRACE);
 historykeyword : ((CAP_H | H)|(CAP_H | H)) ((CAP_I | I)|(CAP_I | I)) ((CAP_S | S)|(CAP_S | S)) ((CAP_T | T)|(CAP_T | T)) ((CAP_O | O)|(CAP_O | O)) ((CAP_R | R)|(CAP_R | R)) ((CAP_Y | Y)|(CAP_Y | Y));
