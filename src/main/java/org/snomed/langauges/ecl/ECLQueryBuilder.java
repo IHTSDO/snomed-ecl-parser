@@ -526,7 +526,7 @@ public class ECLQueryBuilder {
 					historyProfile = HistoryProfile.MAX;
 				}
 				supplement.setHistoryProfile(historyProfile);
-			} else {
+			} else if (historysupplement.historysubset() != null) {
 				supplement.setHistorySubset(build(historysupplement.historysubset().expressionconstraint()));
 			}
 			return supplement;

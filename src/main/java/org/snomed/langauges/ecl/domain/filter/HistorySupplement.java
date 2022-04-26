@@ -8,6 +8,7 @@ public class HistorySupplement {
 	private HistoryProfile historyProfile;
 	// OR
 	private ExpressionConstraint historySubset;
+	// OR blank = MAX
 
 	public void setHistoryProfile(HistoryProfile historyProfile) {
 		this.historyProfile = historyProfile;
