@@ -1,18 +1,18 @@
 package org.snomed.langauges.ecl.domain.filter;
 
-import java.util.Set;
+import java.util.List;
 
 public class EffectiveTimeFilter {
 
 	private NumericComparisonOperator operator;
-	private Set<Integer> effectiveTime;
+	private List<Integer> effectiveTime;
 
 	@SuppressWarnings("unused")
 	protected EffectiveTimeFilter() {
 		// For JSON
 	}
 
-	public EffectiveTimeFilter(NumericComparisonOperator operator, Set<Integer> effectiveTime) {
+	public EffectiveTimeFilter(NumericComparisonOperator operator, List<Integer> effectiveTime) {
 		this.operator = operator;
 		this.effectiveTime = effectiveTime;
 	}
@@ -21,7 +21,7 @@ public class EffectiveTimeFilter {
 		return operator;
 	}
 
-	public Set<Integer> getEffectiveTime() {
+	public List<Integer> getEffectiveTime() {
 		return effectiveTime;
 	}
 

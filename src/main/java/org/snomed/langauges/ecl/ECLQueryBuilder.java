@@ -15,7 +15,6 @@ import org.snomed.langauges.ecl.generated.parser.ECLParser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ECLQueryBuilder {
@@ -272,12 +271,12 @@ public class ECLQueryBuilder {
 			if (operator == null) {
 				throw new IllegalArgumentException(String.format("Time comparison operator '%s' not recognised.", operatorText));
 			}
-			Set<Integer> effectiveTimes;
+			List<Integer> effectiveTimes;
 			if (effectivetimefilter.timevalue() != null) {
-				effectiveTimes = Collections.singleton(getEffectiveTime(effectivetimefilter.timevalue()));
+				effectiveTimes = Collections.singletonList(getEffectiveTime(effectivetimefilter.timevalue()));
 			} else {
 				effectiveTimes = effectivetimefilter.timevalueset().timevalue().stream()
-						.map(this::getEffectiveTime).collect(Collectors.toSet());
+						.map(this::getEffectiveTime).collect(Collectors.toList());
 			}
 			return eclObjectFactory.getEffectiveTimeFilter(operator, effectiveTimes);
 		}
@@ -532,12 +531,12 @@ public class ECLQueryBuilder {
 			return supplement;
 		}
 
-		private Set<ConceptReference> buildConceptReferences(List<ECLParser.EclconceptreferenceContext> eclconceptreference) {
-			return eclconceptreference.stream().map(this::build).collect(Collectors.toSet());
+		private List<ConceptReference> buildConceptReferences(List<ECLParser.EclconceptreferenceContext> eclconceptreference) {
+			return eclconceptreference.stream().map(this::build).collect(Collectors.toList());
 		}
 
-		private Set<Acceptability> build(ECLParser.AcceptabilitytokensetContext acceptabilitytokenset) {
-			return acceptabilitytokenset.acceptabilitytoken().stream().map(this::build).collect(Collectors.toSet());
+		private List<Acceptability> build(ECLParser.AcceptabilitytokensetContext acceptabilitytokenset) {
+			return acceptabilitytokenset.acceptabilitytoken().stream().map(this::build).collect(Collectors.toList());
 		}
 
 		private Acceptability build(ECLParser.AcceptabilitytokenContext acceptabilitytokenContext) {

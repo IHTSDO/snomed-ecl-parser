@@ -3,7 +3,7 @@ package org.snomed.langauges.ecl.domain.filter;
 import org.snomed.langauges.ecl.domain.ConceptReference;
 import org.snomed.langauges.ecl.domain.expressionconstraint.SubExpressionConstraint;
 
-import java.util.Set;
+import java.util.List;
 
 public class DialectAcceptability {
 
@@ -13,8 +13,8 @@ public class DialectAcceptability {
 	private String dialectAlias;
 
 	// One of:
-	private Set<ConceptReference> acceptabilityIdSet;
-	private Set<Acceptability> acceptabilityTokenSet;
+	private List<ConceptReference> acceptabilityIdSet;
+	private List<Acceptability> acceptabilityTokenSet;
 
 	@SuppressWarnings("unused")
 	// For JSON
@@ -45,19 +45,19 @@ public class DialectAcceptability {
 		return dialectAlias;
 	}
 
-	public Set<ConceptReference> getAcceptabilityIdSet() {
+	public List<ConceptReference> getAcceptabilityIdSet() {
 		return acceptabilityIdSet;
 	}
 
-	public void setAcceptabilityIdSet(Set<ConceptReference> acceptabilityIdSet) {
+	public void setAcceptabilityIdSet(List<ConceptReference> acceptabilityIdSet) {
 		this.acceptabilityIdSet = acceptabilityIdSet;
 	}
 
-	public Set<Acceptability> getAcceptabilityTokenSet() {
+	public List<Acceptability> getAcceptabilityTokenSet() {
 		return acceptabilityTokenSet;
 	}
 
-	public void setAcceptabilityTokenSet(Set<Acceptability> acceptabilityTokenSet) {
+	public void setAcceptabilityTokenSet(List<Acceptability> acceptabilityTokenSet) {
 		this.acceptabilityTokenSet = acceptabilityTokenSet;
 	}
 

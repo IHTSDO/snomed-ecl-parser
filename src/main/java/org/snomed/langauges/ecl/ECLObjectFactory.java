@@ -8,7 +8,7 @@ import org.snomed.langauges.ecl.domain.expressionconstraint.SubExpressionConstra
 import org.snomed.langauges.ecl.domain.filter.*;
 import org.snomed.langauges.ecl.domain.refinement.*;
 
-import java.util.Set;
+import java.util.List;
 
 public class ECLObjectFactory {
 
@@ -60,7 +60,7 @@ public class ECLObjectFactory {
 		return new FieldFilter(fieldName, equals);
 	}
 
-	public EffectiveTimeFilter getEffectiveTimeFilter(NumericComparisonOperator operator, Set<Integer> effectiveTimes) {
+	public EffectiveTimeFilter getEffectiveTimeFilter(NumericComparisonOperator operator, List<Integer> effectiveTimes) {
 		return new EffectiveTimeFilter(operator, effectiveTimes);
 	}
 
