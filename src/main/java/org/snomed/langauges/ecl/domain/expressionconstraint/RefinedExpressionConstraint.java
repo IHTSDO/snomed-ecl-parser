@@ -4,8 +4,8 @@ import org.snomed.langauges.ecl.domain.refinement.EclRefinement;
 
 public class RefinedExpressionConstraint implements ExpressionConstraint {
 
-	protected SubExpressionConstraint subexpressionConstraint;
-	protected EclRefinement eclRefinement;
+	protected final SubExpressionConstraint subexpressionConstraint;
+	protected final EclRefinement eclRefinement;
 
 	public RefinedExpressionConstraint(SubExpressionConstraint subExpressionConstraint, EclRefinement eclRefinement) {
 		this.subexpressionConstraint = subExpressionConstraint;

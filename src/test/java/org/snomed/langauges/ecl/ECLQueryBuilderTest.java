@@ -17,7 +17,7 @@ public class ECLQueryBuilderTest {
 	private ECLQueryBuilder eclQueryBuilder;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		eclQueryBuilder = new ECLQueryBuilder(new ECLObjectFactory());
 	}
 
@@ -74,12 +74,12 @@ public class ECLQueryBuilderTest {
 	  The Java representation can be built using your own classes by extending ECLObjectFactory
 	 */
 	@Test
-	public void parseNestedAttributeValue() throws Exception {
+	public void parseNestedAttributeValue() {
 		ExpressionConstraint query = eclQueryBuilder.createQuery(
-				"< 404684003 |üåäöáðę 中国 ہیلو Қазақ finding| :\n" +
-						"    47429007 |שלום with| = " +
-						"        (< 404684003 |안녕하세요 finding| : \n" +
-						"            116676008 |بهاس ملايو morphology|  = <<  55641003 |český| )");
+                """
+                        < 404684003 |üåäöáðę 中国 ہیلو Қазақ finding| :
+                            47429007 |שלום with| =         (< 404684003 |안녕하세요 finding| :\s
+                                    116676008 |بهاس ملايو morphology|  = <<  55641003 |český| )""");
 
 		Assert.assertTrue(query instanceof RefinedExpressionConstraint);
 
@@ -152,7 +152,7 @@ public class ECLQueryBuilderTest {
 		SubAttributeSet subAttributeSet1 = attributeSet1.getSubAttributeSet();
 		assertNotNull(subAttributeSet1);
 		assertNotNull(subAttributeSet1.getAttribute().getValue());
-		assertEquals(true, subAttributeSet1.getAttribute().getValue().isWildcard());
+        assertTrue(subAttributeSet1.getAttribute().getValue().isWildcard());
 		assertNotNull(subAttributeSet1.getAttribute().getAttributeName());
 		assertEquals("116676008", subAttributeSet1.getAttribute().getAttributeName().getConceptId());
 		assertEquals("Associated morphology", subAttributeSet1.getAttribute().getAttributeName().getTerm());

@@ -27,23 +27,7 @@ public class ECLQueryBuilder {
 
 	public ExpressionConstraint createQuery(String ecl) throws ECLException {
 		ecl = ecl.replace(",", " ,");
-		ANTLRInputStream inputStream = new ANTLRInputStream(ecl);
-		final ECLLexer lexer = new ECLLexer(inputStream);
-		final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
-		final ECLParser parser = new ECLParser(tokenStream);
-		parser.removeErrorListeners();
-		parser.setErrorHandler(new DefaultErrorStrategy() {
-			@Override
-			protected void reportNoViableAlternative(Parser recognizer, NoViableAltException e) {
-				Token startToken = e.getStartToken();
-				if (startToken.getText().equals("<EOF>")) {
-					throw new ECLException("ECL is incomplete.");
-				} else {
-					throw new ECLException(String.format("No viable alternative at line %s, character %s.",
-							startToken.getLine(), startToken.getCharPositionInLine()));
-				}
-			}
-		});
+		final ECLParser parser = getEclParser(ecl);
 		parser.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
@@ -65,6 +49,27 @@ public class ECLQueryBuilder {
 		return listener.getRootExpressionConstraint();
 	}
 
+	private static ECLParser getEclParser(String ecl) {
+		ANTLRInputStream inputStream = new ANTLRInputStream(ecl);
+		final ECLLexer lexer = new ECLLexer(inputStream);
+		final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
+		final ECLParser parser = new ECLParser(tokenStream);
+		parser.removeErrorListeners();
+		parser.setErrorHandler(new DefaultErrorStrategy() {
+			@Override
+			protected void reportNoViableAlternative(Parser recognizer, NoViableAltException e) {
+				Token startToken = e.getStartToken();
+				if (startToken.getText().equals("<EOF>")) {
+					throw new ECLException("ECL is incomplete.");
+				} else {
+					throw new ECLException(String.format("No viable alternative at line %s, character %s.",
+							startToken.getLine(), startToken.getCharPositionInLine()));
+				}
+			}
+		});
+		return parser;
+	}
+
 	private static final class ECLListenerImpl extends ImpotentECLListener {
 
 		private final ECLObjectFactory eclObjectFactory;
@@ -81,13 +86,6 @@ public class ECLQueryBuilder {
 				rootExpressionConstraint = expressionConstraint;
 			}
 		}
-
-//		@Override
-//		public void visitErrorNode(ErrorNode errorNode) {
-//			Token symbol = errorNode.getSymbol();
-//			throw new ECLException(String.format("Unexpected character '%s' at position %s.", symbol.getText(), symbol.getStartIndex()));
-//		}
-
 		private ExpressionConstraint build(ECLParser.ExpressionconstraintContext expressionConstraint) {
 			if (expressionConstraint.refinedexpressionconstraint() != null) {
 				return build(expressionConstraint.refinedexpressionconstraint());
@@ -339,7 +337,7 @@ public class ECLQueryBuilder {
 			} else {
 				StringBuilder buffer = new StringBuilder();
 				for (ECLParser.MatchsearchtermContext matchsearchtermContext : typedsearchterm.matchsearchtermset().matchsearchterm()) {
-					if (buffer.length() > 0) {
+					if (!buffer.isEmpty()) {
 						buffer.append(" ");
 					}
 					buffer.append(matchsearchtermContext.getText());
