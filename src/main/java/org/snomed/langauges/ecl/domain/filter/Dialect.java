@@ -1,7 +1,6 @@
 package org.snomed.langauges.ecl.domain.filter;
 
 import java.util.Objects;
-import java.util.StringJoiner;
 
 public class Dialect {
 
