@@ -35,6 +35,38 @@ public class ECLQueryBuilderTest {
 	}
 
 	@Test
+	public void parseMemberOfNestedQuerySyntax() {
+		ExpressionConstraint expressionConstraint = eclQueryBuilder.createQuery("<< ^700043003 |Example problem list concepts reference set|");
+		assertTrue(expressionConstraint instanceof SubExpressionConstraint);
+		SubExpressionConstraint subExpressionConstraint = (SubExpressionConstraint) expressionConstraint;
+		assertEquals(Operator.descendantorselfof, subExpressionConstraint.getOperator());
+		assertNotNull(subExpressionConstraint.getNestedExpressionConstraint());
+		assertTrue(subExpressionConstraint.getNestedExpressionConstraint() instanceof SubExpressionConstraint);
+		SubExpressionConstraint nestedExpressionConstraint = (SubExpressionConstraint) subExpressionConstraint.getNestedExpressionConstraint();
+		assertEquals(Operator.memberOf, nestedExpressionConstraint.getOperator());
+		assertEquals("700043003", nestedExpressionConstraint.getConceptId());
+
+		expressionConstraint = eclQueryBuilder.createQuery("<< (^700043003 |Example problem list concepts reference set|)");
+		assertTrue(expressionConstraint instanceof SubExpressionConstraint);
+		subExpressionConstraint = (SubExpressionConstraint) expressionConstraint;
+		assertEquals(Operator.descendantorselfof, subExpressionConstraint.getOperator());
+		assertNotNull(subExpressionConstraint.getNestedExpressionConstraint());
+		assertTrue(subExpressionConstraint.getNestedExpressionConstraint() instanceof SubExpressionConstraint);
+		nestedExpressionConstraint = (SubExpressionConstraint) subExpressionConstraint.getNestedExpressionConstraint();
+		assertEquals(Operator.memberOf, nestedExpressionConstraint.getOperator());
+		assertEquals("700043003", nestedExpressionConstraint.getConceptId());
+	}
+
+	@Test
+	public void parseMemberOfQuerySyntax() {
+		ExpressionConstraint expressionConstraint = eclQueryBuilder.createQuery("^700043003 |Example problem list concepts reference set|");
+		assertTrue(expressionConstraint instanceof SubExpressionConstraint);
+		SubExpressionConstraint subExpressionConstraint = (SubExpressionConstraint) expressionConstraint;
+		assertEquals(Operator.memberOf, subExpressionConstraint.getOperator());
+		assertEquals("700043003", subExpressionConstraint.getConceptId());
+	}
+
+	@Test
 	public void parseInvalidSyntaxDot() {
 		try {
 			eclQueryBuilder.createQuery("<373873005 |Pharmaceutical / biologic product (product)| . 127489000 |Has active ingredient| = < 105590001 |Substance|");
@@ -56,7 +88,8 @@ public class ECLQueryBuilderTest {
 
 	@Test
 	public void parseCommaWithoutSpace() {
-		eclQueryBuilder.createQuery("<<404684003:363698007=<<123037004,116676008=<<415582006");
+		ExpressionConstraint expressionConstraint = eclQueryBuilder.createQuery("<<404684003:363698007=<<123037004,116676008=<<415582006");
+		assertNotNull(expressionConstraint);
 	}
 
 	@Test
