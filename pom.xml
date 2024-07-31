@@ -5,7 +5,7 @@
 
     <groupId>org.snomed.languages</groupId>
     <artifactId>snomed-ecl-parser</artifactId>
-    <version>3.1.1-SNAPSHOT</version>
+    <version>3.1.1</version>
     <name>SNOMED CT Expression Constraint Language Parser</name>
     <description>A parser for Expression Constraint Language, a SNOMED CT domain specific language.</description>
 
