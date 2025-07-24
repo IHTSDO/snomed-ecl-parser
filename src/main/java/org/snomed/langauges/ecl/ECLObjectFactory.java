@@ -88,6 +88,10 @@ public class ECLObjectFactory {
 		return new DescriptionTypeFilter(text);
 	}
 
+	public DescriptionIdFilter getDescriptionIdFilter(String text) {
+		return new DescriptionIdFilter(text);
+	}
+
 	public LanguageFilter getLanguageFilter(String text) {
 		return new LanguageFilter(text);
 	}

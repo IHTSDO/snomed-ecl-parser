@@ -823,12 +823,12 @@ public abstract class ImpotentECLListener implements ECLListener {
 	}
 
 	@Override
-	public void enterMatch(ECLParser.MatchContext ctx) {
+	public void enterMatchkeyword(ECLParser.MatchkeywordContext ctx) {
 
 	}
 
 	@Override
-	public void exitMatch(ECLParser.MatchContext ctx) {
+	public void exitMatchkeyword(ECLParser.MatchkeywordContext ctx) {
 
 	}
 
@@ -1503,26 +1503,6 @@ public abstract class ImpotentECLListener implements ECLListener {
 	}
 
 	@Override
-	public void enterRefsetfieldset(ECLParser.RefsetfieldsetContext ctx) {
-
-	}
-
-	@Override
-	public void exitRefsetfieldset(ECLParser.RefsetfieldsetContext ctx) {
-
-	}
-
-	@Override
-	public void enterRefsetfield(ECLParser.RefsetfieldContext ctx) {
-
-	}
-
-	@Override
-	public void exitRefsetfield(ECLParser.RefsetfieldContext ctx) {
-
-	}
-
-	@Override
 	public void enterRefsetfieldname(ECLParser.RefsetfieldnameContext ctx) {
 
 	}
@@ -1533,12 +1513,12 @@ public abstract class ImpotentECLListener implements ECLListener {
 	}
 
 	@Override
-	public void enterRefsetfieldref(ECLParser.RefsetfieldrefContext ctx) {
+	public void enterRefsetfieldnameset(ECLParser.RefsetfieldnamesetContext ctx) {
 
 	}
 
 	@Override
-	public void exitRefsetfieldref(ECLParser.RefsetfieldrefContext ctx) {
+	public void exitRefsetfieldnameset(ECLParser.RefsetfieldnamesetContext ctx) {
 
 	}
 
@@ -1651,4 +1631,55 @@ public abstract class ImpotentECLListener implements ECLListener {
 	public void exitHistorysubset(ECLParser.HistorysubsetContext ctx) {
 
 	}
+
+	@Override
+	public void enterDescriptionidfilter(ECLParser.DescriptionidfilterContext ctx) {
+
+	}
+
+	@Override
+	public void exitDescriptionidfilter(ECLParser.DescriptionidfilterContext ctx) {
+
+	}
+
+	@Override
+	public void enterDescriptionidkeyword(ECLParser.DescriptionidkeywordContext ctx) {
+
+	}
+
+	@Override
+	public void exitDescriptionidkeyword(ECLParser.DescriptionidkeywordContext ctx) {
+
+	}
+
+	@Override
+	public void enterDescriptionid(ECLParser.DescriptionidContext ctx) {
+
+	}
+
+	@Override
+	public void exitDescriptionid(ECLParser.DescriptionidContext ctx) {
+
+	}
+
+	@Override
+	public void enterDescriptionidset(ECLParser.DescriptionidsetContext ctx) {
+
+	}
+
+	@Override
+	public void exitDescriptionidset(ECLParser.DescriptionidsetContext ctx) {
+
+	}
+
+	@Override
+	public void enterIdcomparisonoperator(ECLParser.IdcomparisonoperatorContext ctx) {
+
+	}
+
+	@Override
+	public void exitIdcomparisonoperator(ECLParser.IdcomparisonoperatorContext ctx) {
+
+	}
+
 }
