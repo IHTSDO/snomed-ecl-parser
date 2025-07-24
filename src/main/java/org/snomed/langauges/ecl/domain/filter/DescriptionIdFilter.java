@@ -26,6 +26,10 @@ public class DescriptionIdFilter {
 		return descriptionIds;
 	}
 
+	public String getBooleanComparisonOperator() {
+		return booleanComparisonOperator;
+	}
+
 	@Override
 	public String toString() {
 		return "DescriptionIdFilter{" +
