@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 3.2.0 Release - ECL version 2.1
+Release for ECL version 2.1.
+
+
 ## 3.1.1 Release - ECL version 2.0 (Jul 2024)
 Security fixes.  
 
