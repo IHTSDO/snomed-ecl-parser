@@ -2,7 +2,9 @@ package org.snomed.langauges.ecl.domain.refinement;
 
 public enum Operator {
 
-	childof("<!"), childorselfof("<<!"), descendantorselfof("<<"), descendantof("<"), parentof(">!"), parentorselfof(">>!"), ancestororselfof(">>"), ancestorof(">"), memberOf("^");
+	childof("<!"), childorselfof("<<!"), descendantorselfof("<<"), descendantof("<"), bottom("!!<"),
+	parentof(">!"), parentorselfof(">>!"), ancestororselfof(">>"), ancestorof(">"), top("!!>"),
+	memberOf("^");
 
 	private final String text;
 

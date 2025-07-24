@@ -139,9 +139,9 @@ public class ECLQueryBuilder {
 			boolean isNested = operator != null && ctx.memberof() != null;
 			SubExpressionConstraint subExpressionConstraint = eclObjectFactory.getSubExpressionConstraint(ctx.memberof() != null ? Operator.memberOf : operator);
 			if (ctx.memberof() != null) {
-				if (ctx.memberof().refsetfieldset() != null) {
+				if (ctx.memberof().refsetfieldnameset() != null) {
 					subExpressionConstraint.setMemberFieldsToReturn(
-							ctx.memberof().refsetfieldset().refsetfield().stream().map(ECLParser.RefsetfieldContext::getText).toList());
+							ctx.memberof().refsetfieldnameset().refsetfieldname().stream().map(ECLParser.RefsetfieldnameContext::getText).toList());
 				} else {
 					subExpressionConstraint.setReturnAllMemberFields(ctx.memberof().wildcard() != null);
 				}
@@ -299,6 +299,10 @@ public class ECLQueryBuilder {
 			return eclObjectFactory.getActiveFilter(activeFilter.booleancomparisonoperator().getText().equals("=") == (activeFilter.activevalue().activetruevalue() != null));
 		}
 
+		private DescriptionIdFilter buildFilter(ECLParser.DescriptionidfilterContext idFilter) {
+			return eclObjectFactory.getDescriptionIdFilter(idFilter.idcomparisonoperator().getText());
+		}
+
 		private DescriptionFilterConstraint buildFilterConstraint(List<ECLParser.DescriptionfilterContext> descriptionFilter) {
 			DescriptionFilterConstraint constraint = eclObjectFactory.getDescriptionFilterConstraint();
 			for (ECLParser.DescriptionfilterContext filter : descriptionFilter) {
@@ -322,6 +326,9 @@ public class ECLQueryBuilder {
 				}
 				if (filter.activefilter() != null) {
 					constraint.addFilter(buildFilter(filter.activefilter()));
+				}
+				if (filter.descriptionidfilter() != null) {
+					constraint.addFilter(buildFilter(filter.descriptionidfilter()));
 				}
 			}
 			return constraint;

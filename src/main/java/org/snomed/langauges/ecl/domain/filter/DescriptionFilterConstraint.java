@@ -12,6 +12,7 @@ public class DescriptionFilterConstraint {
 	private List<FieldFilter> moduleFilters;
 	private List<EffectiveTimeFilter> effectiveTimeFilters;
 	private List<ActiveFilter> activeFilters;
+	private List<DescriptionIdFilter> idFilters;
 
 	public void addFilter(TermFilter filter) {
 		if (termFilters == null) {
@@ -62,6 +63,13 @@ public class DescriptionFilterConstraint {
 		activeFilters.add(activeFilter);
 	}
 
+	public void addFilter(DescriptionIdFilter idFilter) {
+		if (idFilters == null) {
+			idFilters = new ArrayList<>();
+		}
+		idFilters.add(idFilter);
+	}
+
 	public List<TermFilter> getTermFilters() {
 		return termFilters;
 	}
@@ -90,6 +98,10 @@ public class DescriptionFilterConstraint {
 		return activeFilters;
 	}
 
+	public List<DescriptionIdFilter> getIdFilters() {
+		return idFilters;
+	}
+
 	@Override
 	public String toString() {
 		return "DescriptionFilterConstraint{" +
@@ -100,6 +112,7 @@ public class DescriptionFilterConstraint {
 				", moduleFilters=" + moduleFilters +
 				", effectiveTimeFilters=" + effectiveTimeFilters +
 				", activeFilters=" + activeFilters +
+				", idFilters=" + idFilters +
 				'}';
 	}
 }
