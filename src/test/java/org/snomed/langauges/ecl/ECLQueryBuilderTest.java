@@ -109,10 +109,10 @@ public class ECLQueryBuilderTest {
 	@Test
 	public void parseNestedAttributeValue() {
 		ExpressionConstraint query = eclQueryBuilder.createQuery(
-                """
-                        < 404684003 |üåäöáðę 中国 ہیلو Қазақ finding| :
-                            47429007 |שלום with| =         (< 404684003 |안녕하세요 finding| :\s
-                                    116676008 |بهاس ملايو morphology|  = <<  55641003 |český| )""");
+				"""
+						< 404684003 |üåäöáðę 中国 ہیلو Қазақ finding| :
+						    47429007 |שלום with| =         (< 404684003 |안녕하세요 finding| :\s
+						            116676008 |بهاس ملايو morphology|  = <<  55641003 |český| )""");
 
 		Assert.assertTrue(query instanceof RefinedExpressionConstraint);
 
@@ -185,9 +185,39 @@ public class ECLQueryBuilderTest {
 		SubAttributeSet subAttributeSet1 = attributeSet1.getSubAttributeSet();
 		assertNotNull(subAttributeSet1);
 		assertNotNull(subAttributeSet1.getAttribute().getValue());
-        assertTrue(subAttributeSet1.getAttribute().getValue().isWildcard());
+		assertTrue(subAttributeSet1.getAttribute().getValue().isWildcard());
 		assertNotNull(subAttributeSet1.getAttribute().getAttributeName());
 		assertEquals("116676008", subAttributeSet1.getAttribute().getAttributeName().getConceptId());
 		assertEquals("Associated morphology", subAttributeSet1.getAttribute().getAttributeName().getTerm());
 	}
+
+	@Test
+	public void parseTop() {
+		ExpressionConstraint expressionConstraint = eclQueryBuilder.createQuery("!!>(^700043003 |Example problem list concepts reference set|)");
+		assertTrue(expressionConstraint instanceof SubExpressionConstraint);
+		SubExpressionConstraint subExpressionConstraint = (SubExpressionConstraint) expressionConstraint;
+		assertEquals(Operator.top, subExpressionConstraint.getOperator());
+		assertNotNull(subExpressionConstraint.getNestedExpressionConstraint());
+	}
+
+	@Test
+	public void parseBottom() {
+		ExpressionConstraint expressionConstraint = eclQueryBuilder.createQuery("!!<(^700043003 |Example problem list concepts reference set|)");
+		assertTrue(expressionConstraint instanceof SubExpressionConstraint);
+		SubExpressionConstraint subExpressionConstraint = (SubExpressionConstraint) expressionConstraint;
+		assertEquals(Operator.bottom, subExpressionConstraint.getOperator());
+		assertNotNull(subExpressionConstraint.getNestedExpressionConstraint());
+	}
+
+	@Test
+	public void parseAltIdentifer() {
+		ExpressionConstraint expressionConstraint = eclQueryBuilder.createQuery("<< LOINC#54486-6");
+		assertTrue(expressionConstraint instanceof SubExpressionConstraint);
+		SubExpressionConstraint subExpressionConstraint = (SubExpressionConstraint) expressionConstraint;
+		assertTrue(subExpressionConstraint.isAltIdentifier());
+		assertEquals(Operator.descendantorselfof, subExpressionConstraint.getOperator());
+		assertEquals("LOINC", subExpressionConstraint.getAltIdentifierSchemeAlias());
+		assertEquals("54486-6", subExpressionConstraint.getAltIdentifierCode());
+	}
+
 }
