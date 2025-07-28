@@ -322,7 +322,15 @@ public class ECLQueryBuilder {
 		}
 
 		private DescriptionIdFilter buildFilter(ECLParser.DescriptionidfilterContext idFilter) {
-			return eclObjectFactory.getDescriptionIdFilter(idFilter.idcomparisonoperator().getText());
+			DescriptionIdFilter descriptionIdFilter = eclObjectFactory.getDescriptionIdFilter(idFilter.idcomparisonoperator().getText());
+			if (idFilter.descriptionid() != null) {
+				descriptionIdFilter.addDescriptionId(idFilter.descriptionid().getText());
+			} else if (idFilter.descriptionidset() != null) {
+				for (ECLParser.DescriptionidContext descriptionidContext : idFilter.descriptionidset().descriptionid()) {
+					descriptionIdFilter.addDescriptionId(descriptionidContext.getText());
+				}
+			}
+			return descriptionIdFilter;
 		}
 
 		private DescriptionFilterConstraint buildFilterConstraint(List<ECLParser.DescriptionfilterContext> descriptionFilter) {
