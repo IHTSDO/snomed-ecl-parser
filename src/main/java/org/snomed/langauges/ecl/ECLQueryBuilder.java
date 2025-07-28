@@ -107,6 +107,7 @@ public class ECLQueryBuilder {
 				rootExpressionConstraint = expressionConstraint;
 			}
 		}
+
 		private ExpressionConstraint build(ECLParser.ExpressionconstraintContext expressionConstraint) {
 			if (expressionConstraint.refinedexpressionconstraint() != null) {
 				return build(expressionConstraint.refinedexpressionconstraint());
@@ -197,6 +198,19 @@ public class ECLQueryBuilder {
 						subExpressionConstraint.setTerm(eclFocusConcept.eclconceptreference().term().getText().replace(" ,", ","));
 					}
 					subExpressionConstraint.setConceptId(eclFocusConcept.eclconceptreference().conceptid().getText());
+				}
+				ECLParser.AltidentifierContext altIdentifier = eclFocusConcept.altidentifier();
+				if (altIdentifier != null) {
+					subExpressionConstraint.setAltIdentifier(true);
+					if (altIdentifier.term() != null) {
+						subExpressionConstraint.setTerm(altIdentifier.term().getText().replace(" ,", ","));
+					}
+					subExpressionConstraint.setAltIdentifierSchemeAlias(altIdentifier.altidentifierschemealias().getText());
+					if (altIdentifier.altidentifiercodewithinquotes() != null) {
+						subExpressionConstraint.setAltIdentifierCode(altIdentifier.altidentifiercodewithinquotes().getText());
+					} else {
+						subExpressionConstraint.setAltIdentifierCode(altIdentifier.altidentifiercodewithoutquotes().getText());
+					}
 				}
 			} else {
 				subExpressionConstraint.setNestedExpressionConstraint(build(ctx.expressionconstraint()));
