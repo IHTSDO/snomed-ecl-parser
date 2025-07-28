@@ -1682,4 +1682,63 @@ public abstract class ImpotentECLListener implements ECLListener {
 
 	}
 
+	@Override
+	public void enterAltidentifier(ECLParser.AltidentifierContext ctx) {
+
+	}
+
+	@Override
+	public void exitAltidentifier(ECLParser.AltidentifierContext ctx) {
+
+	}
+
+	@Override
+	public void enterAltidentifierschemealias(ECLParser.AltidentifierschemealiasContext ctx) {
+
+	}
+
+	@Override
+	public void exitAltidentifierschemealias(ECLParser.AltidentifierschemealiasContext ctx) {
+
+	}
+
+	@Override
+	public void enterAltidentifiercodewithinquotes(ECLParser.AltidentifiercodewithinquotesContext ctx) {
+
+	}
+
+	@Override
+	public void exitAltidentifiercodewithinquotes(ECLParser.AltidentifiercodewithinquotesContext ctx) {
+
+	}
+
+	@Override
+	public void enterAltidentifiercodewithoutquotes(ECLParser.AltidentifiercodewithoutquotesContext ctx) {
+
+	}
+
+	@Override
+	public void exitAltidentifiercodewithoutquotes(ECLParser.AltidentifiercodewithoutquotesContext ctx) {
+
+	}
+
+	@Override
+	public void enterTop(ECLParser.TopContext ctx) {
+
+	}
+
+	@Override
+	public void exitTop(ECLParser.TopContext ctx) {
+
+	}
+
+	@Override
+	public void enterBottom(ECLParser.BottomContext ctx) {
+
+	}
+
+	@Override
+	public void exitBottom(ECLParser.BottomContext ctx) {
+
+	}
 }

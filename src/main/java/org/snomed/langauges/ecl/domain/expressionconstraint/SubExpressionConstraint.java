@@ -15,6 +15,9 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 	protected String conceptId;
 	protected String term;
 	protected boolean wildcard;
+	protected boolean altIdentifier;
+	private String altIdentifierSchemeAlias;
+	private String altIdentifierCode;
 	protected ExpressionConstraint nestedExpressionConstraint;
 	protected List<ConceptFilterConstraint> conceptFilterConstraints;
 	protected List<DescriptionFilterConstraint> descriptionFilterConstraints;
@@ -58,6 +61,10 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		this.wildcard = wildcard;
 	}
 
+	public void setAltIdentifier(boolean altIdentifier) {
+		this.altIdentifier = altIdentifier;
+	}
+
 	public void setNestedExpressionConstraint(ExpressionConstraint nestedExpressionConstraint) {
 		this.nestedExpressionConstraint = nestedExpressionConstraint;
 	}
@@ -96,6 +103,10 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		return wildcard;
 	}
 
+	public boolean isAltIdentifier() {
+		return altIdentifier;
+	}
+
 	public ExpressionConstraint getNestedExpressionConstraint() {
 		return nestedExpressionConstraint;
 	}
@@ -124,6 +135,22 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 		return returnAllMemberFields;
 	}
 
+	public void setAltIdentifierSchemeAlias(String altIdentifierSchemeAlias) {
+		this.altIdentifierSchemeAlias = altIdentifierSchemeAlias;
+	}
+
+	public String getAltIdentifierSchemeAlias() {
+		return altIdentifierSchemeAlias;
+	}
+
+	public String getAltIdentifierCode() {
+		return altIdentifierCode;
+	}
+
+	public void setAltIdentifierCode(String altIdentifierCode) {
+		this.altIdentifierCode = altIdentifierCode;
+	}
+
 	@Override
 	public String toString() {
 		return "SubExpressionConstraint{" +
@@ -131,6 +158,7 @@ public class SubExpressionConstraint implements ExpressionConstraint {
 				", conceptId='" + conceptId + '\'' +
 				", term='" + term + '\'' +
 				", wildcard=" + wildcard +
+				", altIdentifier=" + altIdentifier +
 				", nestedExpressionConstraint=" + nestedExpressionConstraint +
 				", conceptFilterConstraints=" + conceptFilterConstraints +
 				", descriptionFilterConstraints=" + descriptionFilterConstraints +
