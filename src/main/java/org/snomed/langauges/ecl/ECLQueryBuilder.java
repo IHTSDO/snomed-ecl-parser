@@ -177,21 +177,24 @@ public class ECLQueryBuilder {
 					}
 					subExpressionConstraint.setConceptId(eclFocusConcept.eclconceptreference().conceptid().getText());
 				}
-				ECLParser.AltidentifierContext altIdentifier = eclFocusConcept.altidentifier();
-				if (altIdentifier != null) {
-					subExpressionConstraint.setAltIdentifier(true);
-					if (altIdentifier.term() != null) {
-						subExpressionConstraint.setTerm(altIdentifier.term().getText().replace(" ,", ","));
-					}
-					subExpressionConstraint.setAltIdentifierSchemeAlias(altIdentifier.altidentifierschemealias().getText());
-					if (altIdentifier.altidentifiercodewithinquotes() != null) {
-						subExpressionConstraint.setAltIdentifierCode(altIdentifier.altidentifiercodewithinquotes().getText());
-					} else {
-						subExpressionConstraint.setAltIdentifierCode(altIdentifier.altidentifiercodewithoutquotes().getText());
-					}
-				}
+				addAltIdentifier(subExpressionConstraint, eclFocusConcept.altidentifier());
 			} else {
 				subExpressionConstraint.setNestedExpressionConstraint(build(ctx.expressionconstraint()));
+			}
+		}
+
+		private static void addAltIdentifier(SubExpressionConstraint subExpressionConstraint, ECLParser.AltidentifierContext altIdentifier) {
+			if (altIdentifier != null) {
+				subExpressionConstraint.setAltIdentifier(true);
+				if (altIdentifier.term() != null) {
+					subExpressionConstraint.setTerm(altIdentifier.term().getText().replace(" ,", ","));
+				}
+				subExpressionConstraint.setAltIdentifierSchemeAlias(altIdentifier.altidentifierschemealias().getText());
+				if (altIdentifier.altidentifiercodewithinquotes() != null) {
+					subExpressionConstraint.setAltIdentifierCode(altIdentifier.altidentifiercodewithinquotes().getText());
+				} else {
+					subExpressionConstraint.setAltIdentifierCode(altIdentifier.altidentifiercodewithoutquotes().getText());
+				}
 			}
 		}
 
