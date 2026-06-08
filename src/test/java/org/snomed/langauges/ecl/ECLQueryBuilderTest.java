@@ -67,6 +67,37 @@ public class ECLQueryBuilderTest {
 	}
 
 	@Test
+	public void parseInvalidConceptId() {
+		// Non-numeric concept ID should report the Syntax error with the offending input, not the raw ANTLR message
+		try {
+			eclQueryBuilder.createQuery("<< abc");
+			fail("Expected exception");
+		} catch (ECLException e) {
+			assertEquals("Syntax error at line 1, character 3: no viable alternative at input '<< a'", e.getMessage());
+		}
+	}
+
+	@Test
+	public void parseDescendantOrSelf() {
+		ExpressionConstraint expressionConstraint = eclQueryBuilder.createQuery("<< 404684003");
+		assertTrue(expressionConstraint instanceof SubExpressionConstraint);
+		SubExpressionConstraint subExpressionConstraint = (SubExpressionConstraint) expressionConstraint;
+		assertEquals(Operator.descendantorselfof, subExpressionConstraint.getOperator());
+		assertEquals("404684003", subExpressionConstraint.getConceptId());
+	}
+
+	@Test
+	public void parseDescendantOrSelfWithoutFocus() {
+		// << with no focus concept should give a Syntax error with position info, not a raw ANTLR message
+		try {
+			eclQueryBuilder.createQuery("<<");
+			fail("Expected exception");
+		} catch (ECLException e) {
+			assertEquals("Syntax error at line 1, character 2: no viable alternative at input '<<'", e.getMessage());
+		}
+	}
+
+	@Test
 	public void parseInvalidSyntaxDot() {
 		try {
 			eclQueryBuilder.createQuery("<373873005 |Pharmaceutical / biologic product (product)| . 127489000 |Has active ingredient| = < 105590001 |Substance|");

@@ -54,19 +54,41 @@ public class ECLQueryBuilder {
 		final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 		final ECLParser parser = new ECLParser(tokenStream);
 		parser.removeErrorListeners();
-		parser.setErrorHandler(new DefaultErrorStrategy() {
-			@Override
-			protected void reportNoViableAlternative(Parser recognizer, NoViableAltException e) {
-				Token startToken = e.getStartToken();
-				if (startToken.getText().equals("<EOF>")) {
-					throw new ECLException("ECL is incomplete.");
-				} else {
-					throw new ECLException(String.format("No viable alternative at line %s, character %s.",
-							startToken.getLine(), startToken.getCharPositionInLine()));
+		parser.setErrorHandler(new ECLErrorStrategy());
+		return parser;
+	}
+
+	private static final class ECLErrorStrategy extends DefaultErrorStrategy {
+		@Override
+		protected void reportNoViableAlternative(Parser recognizer, NoViableAltException e) {
+			if (e.getStartToken().getText().equals("<EOF>")) {
+				throw new ECLException("ECL is incomplete.", e);
+			}
+			TokenStream tokens = recognizer.getTokenStream();
+			Token firstUnexpected = findFirstUnexpectedToken(e, tokens);
+			if (firstUnexpected != null) {
+				String input = tokens.getText(e.getStartToken(), e.getOffendingToken());
+				String msg = "no viable alternative at input " + escapeWSAndQuote(input);
+				recognizer.notifyErrorListeners(firstUnexpected, msg, e);
+			} else {
+				super.reportNoViableAlternative(recognizer, e);
+			}
+		}
+
+		// Scans forward from the start token past ECL operators/whitespace to find the first unexpected token.
+		private static Token findFirstUnexpectedToken(NoViableAltException e, TokenStream tokens) {
+			if (!e.getStartToken().getText().matches("[<>!^|@=+\\-\\s]")) {
+				return null;
+			}
+			for (int i = e.getStartToken().getTokenIndex(); i < tokens.size(); i++) {
+				Token t = tokens.get(i);
+				if (t.getType() == Token.EOF) break;
+				if (!t.getText().matches("[<>!^|@=+\\-\\s(){}]")) {
+					return t;
 				}
 			}
-		});
-		return parser;
+			return null;
+		}
 	}
 
 	private static final class ECLListenerImpl extends ImpotentECLListener {
