@@ -73,7 +73,7 @@ public class ECLQueryBuilderTest {
 			eclQueryBuilder.createQuery("<< abc");
 			fail("Expected exception");
 		} catch (ECLException e) {
-			assertEquals("Syntax error at line 1, character 3: no viable alternative at input '<< a'", e.getMessage());
+			assertEquals("Syntax error at line 1, character 3: no viable alternative at input '<< abc'", e.getMessage());
 		}
 	}
 
