@@ -103,7 +103,7 @@ public class ECLQueryBuilderTest {
 			eclQueryBuilder.createQuery("<373873005 |Pharmaceutical / biologic product (product)| . 127489000 |Has active ingredient| = < 105590001 |Substance|");
 			fail("Expected exception");
 		} catch (ECLException e) {
-			assertEquals("Syntax error at line 1, character 93: unexpected character '=' expecting {<EOF>, '\\u0009', '\\u000A', '\\u000D', ' ', '/'}", e.getMessage());
+			assertEquals("Syntax error at line 1, character 93: unexpected character '='", e.getMessage());
 		}
 	}
 
@@ -113,7 +113,7 @@ public class ECLQueryBuilderTest {
 			eclQueryBuilder.createQuery("<<404684003:363698007=<<123037004and116676008=<<415582006");
 			fail("Expected exception");
 		} catch (ECLException e) {
-			assertEquals("Syntax error at line 1, character 33: mismatched input 'a' expecting {<EOF>, '\\u0009', '\\u000A', '\\u000D', ' ', '/', '{', '|'}", e.getMessage());
+			assertEquals("Syntax error at line 1, character 36: mismatched input '1' expecting {'\\u0009', '\\u000A', '\\u000D', ' ', '/'}", e.getMessage());
 		}
 	}
 
@@ -129,7 +129,7 @@ public class ECLQueryBuilderTest {
 			eclQueryBuilder.createQuery("<<404684003:[1..2]363698007= <<123037004 [0..0]116676008= <<415582006");
 			fail("Expected exception");
 		} catch (ECLException e) {
-			assertEquals("Syntax error at line 1, character 41: unexpected character '[' expecting {<EOF>, '\\u0009', '\\u000A', '\\u000D', ' ', ',', '/', 'A', 'O', 'a', 'o'}", e.getMessage());
+			assertEquals("Syntax error at line 1, character 41: unexpected character '['", e.getMessage());
 		}
 	}
 

@@ -38,6 +38,12 @@ public class ECLQueryBuilder {
 		ParserRuleContext tree;
 		try {
 			tree = parser.expressionconstraint();
+			Token leftover = parser.getCurrentToken();
+			if (leftover != null && leftover.getType() != Token.EOF) {
+				throw new ECLException(String.format(
+						"Syntax error at line %s, character %s: unexpected character '%s'",
+						leftover.getLine(), leftover.getCharPositionInLine(), leftover.getText()));
+			}
 		} catch (NullPointerException | RecognitionException | ParseCancellationException e) {
 			throw new ECLException("Failed to parse ECL '" + ecl + "'", e);
 		}
@@ -49,7 +55,7 @@ public class ECLQueryBuilder {
 	}
 
 	private static ECLParser getEclParser(String ecl) {
-		ANTLRInputStream inputStream = new ANTLRInputStream(ecl);
+		CharStream inputStream = CharStreams.fromString(ecl);
 		final ECLLexer lexer = new ECLLexer(inputStream);
 		final CommonTokenStream tokenStream = new CommonTokenStream(lexer);
 		final ECLParser parser = new ECLParser(tokenStream);
@@ -61,7 +67,7 @@ public class ECLQueryBuilder {
 	private static final class ECLErrorStrategy extends DefaultErrorStrategy {
 		@Override
 		protected void reportNoViableAlternative(Parser recognizer, NoViableAltException e) {
-			if (e.getStartToken().getText().equals("<EOF>")) {
+			if (isEof(e.getStartToken())) {
 				throw new ECLException("ECL is incomplete.", e);
 			}
 			TokenStream tokens = recognizer.getTokenStream();
@@ -73,6 +79,18 @@ public class ECLQueryBuilder {
 			} else {
 				super.reportNoViableAlternative(recognizer, e);
 			}
+		}
+
+		@Override
+		protected void reportInputMismatch(Parser recognizer, InputMismatchException e) {
+			if (isEof(e.getOffendingToken())) {
+				throw new ECLException("ECL is incomplete.", e);
+			}
+			super.reportInputMismatch(recognizer, e);
+		}
+
+		private static boolean isEof(Token token) {
+			return token != null && (token.getType() == Token.EOF || "<EOF>".equals(token.getText()));
 		}
 
 		// Scans forward from the start token past ECL operators/whitespace to find the first unexpected token.
